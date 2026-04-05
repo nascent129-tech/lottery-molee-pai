@@ -2,233 +2,173 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <title>กาดหวยโมฬี สาขาปาย</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
-:root{--navy:#0D47A1;--navy-dark:#1A237E;--blue-light:#E3F2FD;--blue-mid:#90CAF9;--blue-bg:#F5F9FF;--teal:#00695C;--teal-light:#E0F2F1;--green:#2E7D32;--green-light:#E8F5E9;--red:#C62828;--red-light:#FFEBEE;--orange:#E65100;--orange-light:#FFF3E0;--purple:#6A1B9A;--purple-light:#F3E5F5;--gray:#546E7A;--gray-light:#90A4AE}
+:root{--n:#0D47A1;--nd:#1A237E;--bl:#E3F2FD;--bm:#90CAF9;--bb:#F5F9FF;--t:#00695C;--tl:#E0F2F1;--g:#2E7D32;--gl:#E8F5E9;--r:#C62828;--rl:#FFEBEE;--o:#E65100;--ol:#FFF3E0;--p:#6A1B9A;--pl:#F3E5F5;--gr:#546E7A;--grl:#90A4AE}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Noto Sans Thai','Sarabun',sans-serif;background:linear-gradient(180deg,var(--blue-light)0%,var(--blue-bg)40%,#fff 100%);min-height:100vh;color:#333;-webkit-tap-highlight-color:transparent}
-input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+body{font-family:'Noto Sans Thai',sans-serif;background:linear-gradient(180deg,var(--bl)0%,var(--bb)40%,#fff 100%);min-height:100vh;color:#333;-webkit-tap-highlight-color:transparent}
+input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{-webkit-appearance:none}
 input[type=number]{-moz-appearance:textfield}
 #app{max-width:480px;margin:0 auto;padding:16px 16px 32px}
 .fi{animation:fi .3s ease-out}@keyframes fi{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.pulse{animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-.hidden{display:none!important}
-.card{border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);background:var(--blue-light);border:2px solid transparent}
-.card-t{font-size:14px;font-weight:600;color:var(--gray);margin-bottom:4px}
-.card-v{font-size:24px;font-weight:900;color:var(--navy)}
+.pulse{animation:pu 2s infinite}@keyframes pu{0%,100%{opacity:1}50%{opacity:.6}}
+.cd{border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.08);background:var(--bl)}
+.ct{font-size:14px;font-weight:600;color:var(--gr);margin-bottom:4px}
+.cv{font-size:24px;font-weight:900;color:var(--n)}
 .btn{width:100%;border:none;border-radius:16px;padding:18px;font-size:18px;font-weight:700;cursor:pointer;transition:transform .1s;font-family:inherit}
 .btn:active{transform:scale(.98)}
-.bp{background:linear-gradient(135deg,var(--navy),#1565C0);color:#fff}
-.bt{background:linear-gradient(135deg,var(--teal),#00897B);color:#fff}
-.bg{background:linear-gradient(135deg,var(--green),#43A047);color:#fff}
-.bo{background:#fff;border:2px solid var(--navy);color:var(--navy)}
-.bot{background:#fff;border:2px solid var(--teal);color:var(--teal)}
+.bp{background:linear-gradient(135deg,var(--n),#1565C0);color:#fff}
+.bt{background:linear-gradient(135deg,var(--t),#00897B);color:#fff}
+.bg{background:linear-gradient(135deg,var(--g),#43A047);color:#fff}
+.bo{background:#fff;border:2px solid var(--n);color:var(--n)}
 .bd{background:#B0BEC5!important;cursor:default}
 .bs{padding:10px 16px;font-size:14px;border-radius:10px;width:auto}
 .bb{width:100%;border-radius:16px;padding:20px;text-align:left;box-shadow:0 4px 12px rgba(0,0,0,.12);position:relative;border:none;cursor:pointer;color:#fff;transition:transform .1s;font-family:inherit}
 .bb:active{transform:scale(.98)}
-.bb-c{display:flex;align-items:center;gap:12px}
-.bb-i{font-size:30px}
-.bb-t{font-size:20px;font-weight:700;line-height:1.3}
-.badge{position:absolute;top:12px;right:12px;background:#EF5350;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px}
-.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 16px;border-radius:12px;font-size:18px;font-weight:600;color:var(--navy);background:transparent;border:none;cursor:pointer;text-align:left;font-family:inherit;transition:background .15s}
+.bbc{display:flex;align-items:center;gap:12px}
+.bbi{font-size:30px}.bbt{font-size:20px;font-weight:700;line-height:1.3}
+.bdg{position:absolute;top:12px;right:12px;background:#EF5350;color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:20px}
+.nb{display:flex;align-items:center;gap:8px;width:100%;padding:12px 16px;border-radius:12px;font-size:18px;font-weight:600;color:var(--n);background:0;border:none;cursor:pointer;text-align:left;font-family:inherit}
 .nb:active{background:#BBDEFB}
 .ig{margin-bottom:16px}
-.il{display:block;font-size:18px;font-weight:600;color:var(--navy-dark);margin-bottom:4px}
+.il{display:block;font-size:18px;font-weight:600;color:var(--nd);margin-bottom:4px}
 .ir{display:flex;align-items:center;gap:8px}
-.ii{width:100%;font-size:24px;font-weight:700;padding:16px;border-radius:12px;border:2px solid var(--blue-mid);background:var(--blue-bg);color:var(--navy);font-family:inherit;outline:none;min-height:56px}
-.ii:focus{border-color:var(--navy)}
-.is{font-size:20px;font-weight:700;color:var(--navy);white-space:nowrap}
+.ii{width:100%;font-size:24px;font-weight:700;padding:16px;border-radius:12px;border:2px solid var(--bm);background:var(--bb);color:var(--n);font-family:inherit;outline:none;min-height:56px}
+.ii:focus{border-color:var(--n)}
+.iit{width:100%;font-size:18px;font-weight:600;padding:14px;border-radius:12px;border:2px solid var(--bm);background:var(--bb);color:var(--n);font-family:inherit;outline:none}
+.is{font-size:20px;font-weight:700;color:var(--n);white-space:nowrap}
 .pw{margin-bottom:24px}
-.pl{font-size:14px;font-weight:700;color:var(--navy-dark);margin-bottom:4px}
-.pb{width:100%;height:12px;border-radius:6px;background:#BBDEFB;overflow:hidden}
-.pf{height:100%;border-radius:6px;background:linear-gradient(90deg,#1565C0,var(--navy));transition:width .3s}
-.sok{display:inline-block;padding:4px 12px;border-radius:20px;font-size:18px;font-weight:900;background:var(--green-light);color:var(--green)}
-.sbd{display:inline-block;padding:4px 12px;border-radius:20px;font-size:18px;font-weight:900;background:var(--red-light);color:var(--red)}
-.bk{display:inline-flex;align-items:center;gap:4px;font-size:18px;font-weight:700;color:#1565C0;background:none;border:none;cursor:pointer;margin-bottom:16px;font-family:inherit;padding:4px 0}
+.pbl{font-size:14px;font-weight:700;color:var(--nd);margin-bottom:4px}
+.pbr{width:100%;height:12px;border-radius:6px;background:#BBDEFB;overflow:hidden}
+.pbf{height:100%;border-radius:6px;background:linear-gradient(90deg,#1565C0,var(--n));transition:width .3s}
+.sok{display:inline-block;padding:4px 12px;border-radius:20px;font-size:16px;font-weight:900;background:var(--gl);color:var(--g)}
+.sbd{display:inline-block;padding:4px 12px;border-radius:20px;font-size:16px;font-weight:900;background:var(--rl);color:var(--r)}
+.swn{display:inline-block;padding:4px 12px;border-radius:20px;font-size:16px;font-weight:900;background:var(--ol);color:var(--o)}
+.bk{display:inline-flex;align-items:center;gap:4px;font-size:18px;font-weight:700;color:#1565C0;background:none;border:none;cursor:pointer;margin-bottom:16px;font-family:inherit}
 .bk:active{opacity:.7}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.fc{display:flex;flex-direction:column}
-.fr{display:flex;flex-direction:row}
-.f1{flex:1}
-.tr{display:flex;gap:8px;margin-bottom:16px}
-.tb{flex:1;padding:12px;border-radius:12px;font-size:18px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s}
-.pn{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--blue-light)}
-.dv{border:none;border-top:1px solid var(--blue-light);margin:4px 0}
+.fc{display:flex;flex-direction:column}.fr{display:flex}.f1{flex:1}
+.pn{background:#fff;border-radius:16px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid var(--bl)}
+.dv{border:none;border-top:1px solid var(--bl);margin:4px 0}
 .pin-s{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:80vh;text-align:center;padding:20px}
-.pin-i{font-size:36px;font-weight:900;text-align:center;letter-spacing:12px;padding:16px 24px;border-radius:16px;border:3px solid var(--blue-mid);background:var(--blue-bg);color:var(--navy);width:260px;font-family:inherit;outline:none;-webkit-text-security:disc}
-.pin-i:focus{border-color:var(--navy)}
-.pin-e{color:var(--red);font-size:16px;font-weight:600;margin-top:8px;min-height:24px}
+.pin-i{font-size:36px;font-weight:900;text-align:center;letter-spacing:12px;padding:16px 24px;border-radius:16px;border:3px solid var(--bm);background:var(--bb);color:var(--n);width:260px;font-family:inherit;outline:none;-webkit-text-security:disc}
+.pin-i:focus{border-color:var(--n)}
+.pin-e{color:var(--r);font-size:16px;font-weight:600;margin-top:8px;min-height:24px}
 .ld{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center}
-.sp{width:48px;height:48px;border:4px solid var(--blue-mid);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite}
+.sp{width:48px;height:48px;border:4px solid var(--bm);border-top-color:var(--n);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:12px;font-size:16px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:ti .3s ease-out}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:12px 24px;border-radius:12px;font-size:16px;font-weight:600;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,.2);animation:ti .3s ease-out;max-width:90%}
 @keyframes ti{from{opacity:0;transform:translate(-50%,20px)}to{opacity:1;transform:translate(-50%,0)}}
 .wait-s{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;text-align:center;padding:20px}
-.dev-card{background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid var(--blue-light)}
-.dev-approved{border-color:#A5D6A7}
-.dev-pending{border-color:#FFE082}
-.dev-blocked{border-color:#EF9A9A}
+.mv{background:#fff;border-radius:12px;padding:12px;margin-bottom:8px;border-left:4px solid var(--bm);font-size:16px}
+.mv-add{border-left-color:var(--g)}.mv-cut{border-left-color:var(--r)}
+.alert-box{border-radius:12px;padding:12px 16px;margin-bottom:12px;font-size:15px;font-weight:600}
+.alert-ok{background:var(--gl);color:var(--g);border:1px solid #A5D6A7}
+.alert-err{background:var(--rl);color:var(--r);border:1px solid #EF9A9A}
+.tab-row{display:flex;gap:8px;margin-bottom:16px}
+.tab-btn{flex:1;padding:12px;border-radius:12px;font-size:16px;font-weight:700;border:none;cursor:pointer;font-family:inherit}
 </style>
 </head>
 <body>
 <div id="app"></div>
 <script>
 // ============================================================
-// 🔥 FIREBASE CONFIG
+// CONFIG
 // ============================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyDERFgSJ_RRPS2B8ZXXzAMq6sUSUywChp8",
-  authDomain: "lottery-molee.firebaseapp.com",
-  databaseURL: "https://lottery-molee-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "lottery-molee",
-  storageBucket: "lottery-molee.firebasestorage.app",
-  messagingSenderId: "246332961593",
-  appId: "1:246332961593:web:351398c63bc6a91e6e6ee8"
-};
-
-// ============================================================
-// 🔑 PIN CONFIG
-// ============================================================
-const MASTER_PIN = "280628";
-const STAFF_PIN = "888999";
-
+const firebaseConfig={apiKey:"AIzaSyDERFgSJ_RRPS2B8ZXXzAMq6sUSUywChp8",authDomain:"lottery-molee.firebaseapp.com",databaseURL:"https://lottery-molee-default-rtdb.asia-southeast1.firebasedatabase.app",projectId:"lottery-molee",storageBucket:"lottery-molee.firebasestorage.app",messagingSenderId:"246332961593",appId:"1:246332961593:web:351398c63bc6a91e6e6ee8"};
+const MASTER_PIN="280628",STAFF_PIN="888999";
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const db=firebase.database();
 
-// ============================================================
-// DEVICE ID
-// ============================================================
-function getDeviceId() {
-  let id = localStorage.getItem('lottery_device_id');
-  if (!id) {
-    id = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2,9);
-    localStorage.setItem('lottery_device_id', id);
-  }
-  return id;
-}
-function getDeviceName() {
-  const ua = navigator.userAgent;
-  if (/iPhone/.test(ua)) return 'iPhone';
-  if (/iPad/.test(ua)) return 'iPad';
-  if (/Android/.test(ua)) {
-    const m = ua.match(/;\s*([^;)]+)\s*Build/);
-    return m ? m[1].trim() : 'Android';
-  }
-  if (/Windows/.test(ua)) return 'Windows PC';
-  if (/Mac/.test(ua)) return 'Mac';
-  return 'อุปกรณ์ไม่ทราบ';
-}
-const DEVICE_ID = getDeviceId();
+// Device
+function getDevId(){let id=localStorage.getItem('ld_id');if(!id){id='d_'+Date.now()+'_'+Math.random().toString(36).substr(2,9);localStorage.setItem('ld_id',id)}return id}
+function getDevName(){const u=navigator.userAgent;if(/iPhone/.test(u))return'iPhone';if(/iPad/.test(u))return'iPad';if(/Android/.test(u)){const m=u.match(/;\s*([^;)]+)\s*Build/);return m?m[1].trim():'Android'}if(/Windows/.test(u))return'Windows PC';if(/Mac/.test(u))return'Mac';return'อุปกรณ์'}
+const DID=getDevId();
 
-// ============================================================
-// CONSTANTS
-// ============================================================
-const TYPES=[{key:'singles',rkey:'remainSingles',label:'ใบเดี่ยว',price:90},{key:'set2',rkey:'remainSet2',label:'ชุด 2 ใบ',price:200},{key:'set3',rkey:'remainSet3',label:'ชุด 3 ใบ',price:340},{key:'set5',rkey:'remainSet5',label:'ชุด 5 ใบ',price:600},{key:'set10',rkey:'remainSet10',label:'ชุด 10 ใบ',price:2000}];
+// Constants
+const TY=[{k:'singles',r:'remainSingles',l:'ใบเดี่ยว',p:90},{k:'set2',r:'remainSet2',l:'ชุด 2 ใบ',p:200},{k:'set3',r:'remainSet3',l:'ชุด 3 ใบ',p:340},{k:'set5',r:'remainSet5',l:'ชุด 5 ใบ',p:600},{k:'set10',r:'remainSet10',l:'ชุด 10 ใบ',p:2000}];
 const TM=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
 const fmt=n=>(n??0).toLocaleString('th-TH');
 const fmtB=n=>`${fmt(n)} ฿`;
-const thaiDate=ds=>{if(!ds)return'';const[y,m,d]=ds.split('-').map(Number);return`${d} ${TM[m-1]} ${y+543}`};
-const todayStr=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
-const calcRV=r=>(r.remainSingles||0)*90+(r.remainSet2||0)*200+(r.remainSet3||0)*340+(r.remainSet5||0)*600+(r.remainSet10||0)*2000;
-const calcSV=e=>(e||[]).reduce((s,x)=>s+TYPES.reduce((ss,t)=>ss+(x[t.key]||0)*t.price,0),0);
+const tD=ds=>{if(!ds)return'';const[y,m,d]=ds.split('-').map(Number);return`${d} ${TM[m-1]} ${y+543}`};
+const today=()=>{const d=new Date();return`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`};
+const now=()=>new Date().toISOString();
+const cRV=r=>(r.remainSingles||0)*90+(r.remainSet2||0)*200+(r.remainSet3||0)*340+(r.remainSet5||0)*600+(r.remainSet10||0)*2000;
+const cSV=e=>(e||[]).reduce((s,x)=>s+TY.reduce((ss,t)=>ss+(x[t.k]||0)*t.p,0),0);
 
-// ============================================================
-// STORAGE HELPERS
-// ============================================================
-async function fbL(p,f){try{const s=await db.ref(p).once('value');return s.val()??f}catch(e){return f}}
-async function fbS(p,d){try{await db.ref(p).set(d)}catch(e){console.error(e)}}
+// Firebase helpers
+async function fL(p,f){try{const s=await db.ref(p).once('value');return s.val()??f}catch{return f}}
+async function fS(p,d){try{await db.ref(p).set(d)}catch(e){console.error(e)}}
+function toast(m,ms=2000){const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
 
 // ============================================================
 // STATE
 // ============================================================
 let S={
-  loading:true,authed:false,role:null,// 'master'|'staff'
-  deviceStatus:null,// 'approved'|'pending'|'blocked'
+  loading:true,authed:false,role:null,deviceStatus:null,
   page:'home',
   periods:[],activePeriodId:null,
-  stock:[],daily:[],scan:[],bookings:[],
-  stepMain:1,stepScan:1,formMain:null,formScan:null,formStock:null,formBooking:null,
-  showBookingForm:false,selectedHistory:null,historyTab:'main',summaryTab:'main',
-  showPeriodForm:false,pName:'',pStart:todayStr(),pEnd:'',
-  devices:[] // for master view
+  stock:[],daily:[],scan:[],
+  bookings:[],scanBookings:[],transfers:[],
+  devices:[],
+  // Form states
+  stepMain:1,stepScan:1,formMain:null,formScan:null,formStock:null,
+  showPeriodForm:false,pName:'',pStart:today(),pEnd:'',
+  selectedHistory:null,historyTab:'main',summaryTab:'main',
+  // Booking form
+  bkMode:null,bkAmount:0,bkNote:'',
+  sbkMode:null,sbkAmount:0,sbkNote:'',
+  // Transfer form
+  tfAmount:0,tfNote:'',showTfForm:false,
 };
 
 // ============================================================
-// DEVICE MANAGEMENT
+// DEVICE AUTH (same as before, shortened)
 // ============================================================
-async function registerDevice(role) {
-  const devData = {
-    id: DEVICE_ID,
-    name: getDeviceName(),
-    role: role,
-    status: role === 'master' ? 'approved' : 'pending',
-    registeredAt: new Date().toISOString(),
-    lastSeen: new Date().toISOString()
-  };
-  await fbS(`devices/${DEVICE_ID}`, devData);
-  return devData.status;
-}
-
-async function checkDevice() {
-  const dev = await fbL(`devices/${DEVICE_ID}`, null);
-  if (!dev) return null;
-  // Update last seen
-  await db.ref(`devices/${DEVICE_ID}/lastSeen`).set(new Date().toISOString());
-  return dev;
-}
-
-async function loadDevices() {
-  const devs = await fbL('devices', {});
-  S.devices = Object.values(devs || {});
-}
-
-async function setDeviceStatus(devId, status) {
-  await db.ref(`devices/${devId}/status`).set(status);
-  await loadDevices();
-  render();
-  showToast(status === 'approved' ? '✅ อนุมัติแล้ว' : '🚫 บล็อกแล้ว');
-}
-
-async function removeDevice(devId) {
-  await db.ref(`devices/${devId}`).remove();
-  await loadDevices();
-  render();
-  showToast('🗑️ ลบอุปกรณ์แล้ว');
-}
+async function regDev(role){const d={id:DID,name:getDevName(),role,status:role==='master'?'approved':'pending',registeredAt:now(),lastSeen:now()};await fS(`devices/${DID}`,d);return d.status}
+async function chkDev(){const d=await fL(`devices/${DID}`,null);if(d)await db.ref(`devices/${DID}/lastSeen`).set(now());return d}
+async function loadDevs(){S.devices=Object.values(await fL('devices',{})||{})}
+async function setDevSt(id,st){await db.ref(`devices/${id}/status`).set(st);await loadDevs();render();toast(st==='approved'?'✅ อนุมัติแล้ว':'🚫 บล็อกแล้ว')}
+async function rmDev(id){await db.ref(`devices/${id}`).remove();await loadDevs();render();toast('🗑️ ลบแล้ว')}
 
 // ============================================================
-// DATA LOADING
+// DATA
 // ============================================================
-async function loadPeriods(){S.periods=await fbL('periods',[]);S.activePeriodId=await fbL('activePeriodId',null)}
+async function loadPeriods(){S.periods=await fL('periods',[]);S.activePeriodId=await fL('activePeriodId',null)}
 async function loadPD(){
-  const id=S.activePeriodId;
-  if(!id){S.stock=[];S.daily=[];S.scan=[];S.bookings=[];return}
-  S.stock=await fbL(`data/${id}/stock`,[]);S.daily=await fbL(`data/${id}/daily`,[]);
-  S.scan=await fbL(`data/${id}/scan`,[]);S.bookings=await fbL(`data/${id}/bookings`,[]);
+  const id=S.activePeriodId;if(!id){S.stock=[];S.daily=[];S.scan=[];S.bookings=[];S.scanBookings=[];S.transfers=[];return}
+  S.stock=await fL(`data/${id}/stock`,[]);S.daily=await fL(`data/${id}/daily`,[]);
+  S.scan=await fL(`data/${id}/scan`,[]);S.bookings=await fL(`data/${id}/bookings`,[]);
+  S.scanBookings=await fL(`data/${id}/scanBookings`,[]);S.transfers=await fL(`data/${id}/transfers`,[]);
 }
-async function savePeriods(){await fbS('periods',S.periods);await fbS('activePeriodId',S.activePeriodId)}
-async function saveStock(){if(S.activePeriodId)await fbS(`data/${S.activePeriodId}/stock`,S.stock)}
-async function saveDaily(){if(S.activePeriodId)await fbS(`data/${S.activePeriodId}/daily`,S.daily)}
-async function saveScan(){if(S.activePeriodId)await fbS(`data/${S.activePeriodId}/scan`,S.scan)}
-async function saveBookings(){if(S.activePeriodId)await fbS(`data/${S.activePeriodId}/bookings`,S.bookings)}
+async function savePeriods(){await fS('periods',S.periods);await fS('activePeriodId',S.activePeriodId)}
+async function saveD(k){if(S.activePeriodId)await fS(`data/${S.activePeriodId}/${k}`,S[k])}
 
-function showToast(m,ms=2000){const e=document.createElement('div');e.className='toast';e.textContent=m;document.body.appendChild(e);setTimeout(()=>e.remove(),ms)}
-
+// ============================================================
+// DERIVED
+// ============================================================
 function getD(){
-  const tsv=calcSV(S.stock),cs=(S.daily||[]).reduce((s,r)=>s+(r.cashSales||0)+(r.transferSales||0),0);
-  const ld=S.daily?.length>0?S.daily[S.daily.length-1]:null;
-  const lrv=ld?calcRV(ld):0;
-  const tbv=(S.bookings||[]).filter(b=>b.status!=='✅ครบ').reduce((s,b)=>s+(b.bookingValue||0),0);
-  const sr=tsv-lrv-tbv,ac=ld?.actualCash||0,df=ac-sr,ok=df>=0||!S.daily?.length;
-  const te=(S.daily||[]).some(r=>r.date===todayStr()),tse=(S.scan||[]).some(r=>r.date===todayStr());
+  const tsv=cSV(S.stock);
+  const cs=(S.daily||[]).reduce((s,r)=>s+(r.cashSales||0)+(r.transferSales||0),0);
+  const ld=S.daily?.length?S.daily[S.daily.length-1]:null;
+  const lrv=ld?cRV(ld):0;
+  // Booking balance from movements
+  const bkBal=(S.bookings||[]).reduce((s,b)=>s+(b.type==='add'?b.amount:-(b.amount||0)),0);
+  const sr=tsv-lrv-bkBal;
+  const totalTransferred=(S.transfers||[]).reduce((s,t)=>s+(t.amount||0),0);
+  const pendingTransfer=cs-totalTransferred;
+  const te=(S.daily||[]).some(r=>r.date===today());
+  const tse=(S.scan||[]).some(r=>r.date===today());
   const ap=(S.periods||[]).find(p=>p.id===S.activePeriodId)||null;
-  return{totalStockValue:tsv,cumulativeSales:cs,latestRemainValue:lrv,totalBookingValue:tbv,shouldReceive:sr,actualCash:ac,diffFromShould:df,statusOk:ok,todayRecordExists:te,todayScanExists:tse,activePeriod:ap};
+  // Balance check: Stock should = remain + booking + sales
+  const balCheck=tsv-(lrv+bkBal+cs);
+  // Scan
+  const scBkBal=(S.scanBookings||[]).reduce((s,b)=>s+(b.type==='add'?b.amount:-(b.amount||0)),0);
+  return{tsv,cs,lrv,bkBal,sr,totalTransferred,pendingTransfer,te,tse,ap,balCheck,scBkBal,ld};
 }
 
 // ============================================================
@@ -236,370 +176,424 @@ function getD(){
 // ============================================================
 function render(){
   const a=document.getElementById('app');
-  if(S.loading){a.innerHTML='<div class="ld"><div class="sp"></div><p style="margin-top:16px;font-size:18px;color:var(--gray)">กำลังโหลดข้อมูล...</p></div>';return}
+  if(S.loading){a.innerHTML='<div class="ld"><div class="sp"></div><p style="margin-top:16px;font-size:18px;color:var(--gr)">กำลังโหลด...</p></div>';return}
   if(!S.authed){a.innerHTML=renderPin();attachPin();return}
-  if(S.role==='staff'&&S.deviceStatus==='pending'){a.innerHTML=renderWaiting();return}
-  if(S.role==='staff'&&S.deviceStatus==='blocked'){a.innerHTML=renderBlocked();return}
+  if(S.role==='staff'&&S.deviceStatus==='pending'){a.innerHTML=renderWait();return}
+  if(S.role==='staff'&&S.deviceStatus==='blocked'){a.innerHTML=renderBlock();return}
   const d=getD();let h='';
-  switch(S.page){
-    case'home':h=renderHome(d);break;case'periods':h=renderPeriods(d);break;
-    case'daily-main':h=renderDM(d);break;case'daily-scan':h=renderDS(d);break;
-    case'stock':h=renderSt(d);break;case'bookings':h=renderBk(d);break;
-    case'summary':h=renderSum(d);break;case'history':h=renderHist(d);break;
-    case'devices':h=renderDevices();break;
-    default:h=renderHome(d);
-  }
+  const pg=S.page;
+  if(pg==='home')h=renderHome(d);
+  else if(pg==='periods')h=renderPeriods(d);
+  else if(pg==='daily-main')h=renderDM(d);
+  else if(pg==='daily-scan')h=renderDS(d);
+  else if(pg==='stock')h=renderSt(d);
+  else if(pg==='bookings')h=renderBk(d);
+  else if(pg==='scan-bookings')h=renderSBk(d);
+  else if(pg==='transfers')h=renderTf(d);
+  else if(pg==='summary')h=renderSum(d);
+  else if(pg==='history')h=renderHist(d);
+  else if(pg==='devices')h=renderDevs();
+  else h=renderHome(d);
   a.innerHTML=h;attachEv();
 }
 
-// ============================================================
-// PIN SCREEN
-// ============================================================
-function renderPin(){
-  return`<div class="pin-s fi">
-    <div style="font-size:64px;margin-bottom:16px">🔒</div>
-    <h1 style="font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px">กาดหวยโมฬี สาขาปาย</h1>
-    <p style="font-size:16px;color:var(--gray);margin-bottom:24px">กรุณาใส่รหัส PIN เพื่อเข้าใช้งาน</p>
-    <input type="password" inputmode="numeric" id="pinI" class="pin-i" maxlength="6" placeholder="••••••" autofocus>
-    <div class="pin-e" id="pinE"></div>
-    <button class="btn bp" style="width:260px;margin-top:16px" id="pinB">เข้าสู่ระบบ</button>
-  </div>`;
-}
-
-function attachPin(){
-  const i=document.getElementById('pinI'),b=document.getElementById('pinB'),e=document.getElementById('pinE');
-  if(!i)return;
-  const doLogin=async()=>{
-    const v=i.value;
-    if(v===MASTER_PIN){
-      S.role='master';S.authed=true;S.deviceStatus='approved';
-      sessionStorage.setItem('lottery_role','master');
-      await registerDevice('master');
-      await initData();
-    } else if(v===STAFF_PIN){
-      const dev=await checkDevice();
-      if(dev&&dev.status==='approved'){
-        S.role='staff';S.authed=true;S.deviceStatus='approved';
-        sessionStorage.setItem('lottery_role','staff');
-        await initData();
-      } else if(dev&&dev.status==='blocked'){
-        S.role='staff';S.authed=true;S.deviceStatus='blocked';
-        render();
-      } else {
-        // New or pending device
-        const st=await registerDevice('staff');
-        S.role='staff';S.authed=true;S.deviceStatus=st;
-        sessionStorage.setItem('lottery_role','staff');
-        if(st==='approved') await initData();
-        else render();
-      }
-    } else {
-      e.textContent='❌ รหัส PIN ไม่ถูกต้อง';
-      i.value='';i.focus();
-    }
-  };
-  b.onclick=doLogin;
-  i.onkeydown=e=>{if(e.key==='Enter')doLogin()};
-}
-
-// ============================================================
-// WAITING / BLOCKED SCREENS
-// ============================================================
-function renderWaiting(){
-  return`<div class="wait-s fi">
-    <div style="font-size:64px;margin-bottom:16px">⏳</div>
-    <h1 style="font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px">รอการอนุมัติ</h1>
-    <p style="font-size:18px;color:var(--gray);margin-bottom:8px">อุปกรณ์นี้: <strong>${getDeviceName()}</strong></p>
-    <p style="font-size:16px;color:var(--gray);margin-bottom:24px">กรุณารอเจ้าของระบบอนุมัติอุปกรณ์นี้ก่อน<br>แจ้งเจ้าของให้เข้าระบบแล้วกดอนุมัติ</p>
-    <button class="btn bp" style="width:260px" onclick="recheckDevice()">🔄 ตรวจสอบอีกครั้ง</button>
-    <button class="btn bo" style="width:260px;margin-top:12px" onclick="doLogout()">← กลับหน้าล็อกอิน</button>
-  </div>`;
-}
-
-function renderBlocked(){
-  return`<div class="wait-s fi">
-    <div style="font-size:64px;margin-bottom:16px">🚫</div>
-    <h1 style="font-size:24px;font-weight:900;color:var(--red);margin-bottom:8px">อุปกรณ์ถูกบล็อก</h1>
-    <p style="font-size:18px;color:var(--gray);margin-bottom:24px">อุปกรณ์นี้ถูกบล็อกโดยเจ้าของระบบ<br>กรุณาติดต่อเจ้าของเพื่อขอปลดบล็อก</p>
-    <button class="btn bo" style="width:260px" onclick="doLogout()">← กลับหน้าล็อกอิน</button>
-  </div>`;
-}
-
-async function recheckDevice(){
-  showToast('🔄 กำลังตรวจสอบ...');
-  const dev=await checkDevice();
-  if(dev&&dev.status==='approved'){
-    S.deviceStatus='approved';
-    await initData();
-    showToast('✅ อนุมัติแล้ว!');
-  } else if(dev&&dev.status==='blocked'){
-    S.deviceStatus='blocked';
-    render();
-  } else {
-    showToast('⏳ ยังไม่ได้รับอนุมัติ');
-  }
-}
-
-// ============================================================
-// DEVICE MANAGEMENT PAGE (Master only)
-// ============================================================
-function renderDevices(){
-  const devs=S.devices||[];
-  const pending=devs.filter(d=>d.status==='pending');
-  const approved=devs.filter(d=>d.status==='approved');
-  const blocked=devs.filter(d=>d.status==='blocked');
-
-  const devCard=(d)=>{
-    const isSelf=d.id===DEVICE_ID;
-    const cls=d.status==='approved'?'dev-approved':d.status==='pending'?'dev-pending':'dev-blocked';
-    const stLabel=d.status==='approved'?'✅ อนุมัติแล้ว':d.status==='pending'?'⏳ รอนุมัติ':'🚫 ถูกบล็อก';
-    const lastSeen=d.lastSeen?new Date(d.lastSeen).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'ไม่ทราบ';
-    let btns='';
-    if(!isSelf){
-      if(d.status==='pending') btns=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--green);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDeviceStatus('${d.id}','approved')">✅ อนุมัติ</button><button class="bs f1" style="background:var(--red);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDeviceStatus('${d.id}','blocked')">🚫 บล็อก</button></div>`;
-      else if(d.status==='approved') btns=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--red);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDeviceStatus('${d.id}','blocked')">🚫 บล็อก</button><button class="bs" style="background:#FFEBEE;color:var(--red);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="removeDevice('${d.id}')">🗑️ ลบ</button></div>`;
-      else btns=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--green);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDeviceStatus('${d.id}','approved')">✅ ปลดบล็อก</button><button class="bs" style="background:#FFEBEE;color:var(--red);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="removeDevice('${d.id}')">🗑️ ลบ</button></div>`;
-    }
-    return`<div class="dev-card ${cls}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div>
-          <div style="font-size:18px;font-weight:700;color:var(--navy)">${d.name||'ไม่ทราบ'} ${isSelf?'<span style="font-size:12px;background:var(--navy);color:#fff;padding:2px 8px;border-radius:10px">เครื่องนี้</span>':''}</div>
-          <div style="font-size:14px;color:var(--gray)">${d.role==='master'?'👑 เจ้าของ':'👤 พนักงาน'} • ${stLabel}</div>
-          <div style="font-size:12px;color:var(--gray-light)">เข้าล่าสุด: ${lastSeen}</div>
-        </div>
-      </div>
-      ${btns}
-    </div>`;
-  };
-
-  return`<div class="fi">
-    <button class="bk" onclick="nav('home')">← กลับ</button>
-    <h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:16px">📱 จัดการอุปกรณ์</h2>
-    ${pending.length?`<div style="margin-bottom:16px"><h3 style="font-size:16px;font-weight:700;color:var(--orange);margin-bottom:8px">⏳ รออนุมัติ (${pending.length})</h3>${pending.map(devCard).join('')}</div>`:''}
-    ${approved.length?`<div style="margin-bottom:16px"><h3 style="font-size:16px;font-weight:700;color:var(--green);margin-bottom:8px">✅ อนุมัติแล้ว (${approved.length})</h3>${approved.map(devCard).join('')}</div>`:''}
-    ${blocked.length?`<div style="margin-bottom:16px"><h3 style="font-size:16px;font-weight:700;color:var(--red);margin-bottom:8px">🚫 ถูกบล็อก (${blocked.length})</h3>${blocked.map(devCard).join('')}</div>`:''}
-    ${!devs.length?'<div style="text-align:center;padding:40px 0;font-size:18px;color:var(--gray-light)">ยังไม่มีอุปกรณ์</div>':''}
-  </div>`;
-}
+// PIN / Wait / Block (same as before)
+function renderPin(){return`<div class="pin-s fi"><div style="font-size:64px;margin-bottom:16px">🔒</div><h1 style="font-size:24px;font-weight:900;color:var(--n);margin-bottom:8px">กาดหวยโมฬี สาขาปาย</h1><p style="font-size:16px;color:var(--gr);margin-bottom:24px">กรุณาใส่รหัส PIN</p><input type="password" inputmode="numeric" id="pinI" class="pin-i" maxlength="6" placeholder="••••••" autofocus><div class="pin-e" id="pinE"></div><button class="btn bp" style="width:260px;margin-top:16px" id="pinB">เข้าสู่ระบบ</button></div>`}
+function attachPin(){const i=document.getElementById('pinI'),b=document.getElementById('pinB'),e=document.getElementById('pinE');if(!i)return;const go=async()=>{const v=i.value;if(v===MASTER_PIN){S.role='master';S.authed=true;S.deviceStatus='approved';sessionStorage.setItem('lr','master');await regDev('master');await initData()}else if(v===STAFF_PIN){const dev=await chkDev();if(dev?.status==='approved'){S.role='staff';S.authed=true;S.deviceStatus='approved';sessionStorage.setItem('lr','staff');await initData()}else if(dev?.status==='blocked'){S.role='staff';S.authed=true;S.deviceStatus='blocked';render()}else{const st=await regDev('staff');S.role='staff';S.authed=true;S.deviceStatus=st;sessionStorage.setItem('lr','staff');if(st==='approved')await initData();else render()}}else{e.textContent='❌ รหัส PIN ไม่ถูกต้อง';i.value='';i.focus()}};b.onclick=go;i.onkeydown=ev=>{if(ev.key==='Enter')go()}}
+function renderWait(){return`<div class="wait-s fi"><div style="font-size:64px;margin-bottom:16px">⏳</div><h1 style="font-size:24px;font-weight:900;color:var(--n)">รอการอนุมัติ</h1><p style="font-size:18px;color:var(--gr);margin-bottom:8px">อุปกรณ์: <strong>${getDevName()}</strong></p><p style="font-size:16px;color:var(--gr);margin-bottom:24px">กรุณารอเจ้าของอนุมัติ</p><button class="btn bp" style="width:260px" onclick="rechk()">🔄 ตรวจสอบอีกครั้ง</button><button class="btn bo" style="width:260px;margin-top:12px" onclick="doLogout()">← กลับ</button></div>`}
+function renderBlock(){return`<div class="wait-s fi"><div style="font-size:64px;margin-bottom:16px">🚫</div><h1 style="font-size:24px;font-weight:900;color:var(--r)">อุปกรณ์ถูกบล็อก</h1><p style="font-size:16px;color:var(--gr);margin-bottom:24px">กรุณาติดต่อเจ้าของ</p><button class="btn bo" style="width:260px" onclick="doLogout()">← กลับ</button></div>`}
+async function rechk(){toast('🔄 ตรวจสอบ...');const d=await chkDev();if(d?.status==='approved'){S.deviceStatus='approved';await initData();toast('✅ อนุมัติแล้ว!')}else if(d?.status==='blocked'){S.deviceStatus='blocked';render()}else toast('⏳ ยังไม่ได้อนุมัติ')}
 
 // ============================================================
 // HOME
 // ============================================================
 function renderHome(d){
-  if(!d.activePeriod){
-    return`<div style="text-align:center;padding-top:60px" class="fi">
-      <div style="font-size:64px;margin-bottom:16px">🎰</div>
-      <h1 style="font-size:24px;font-weight:900;color:var(--navy);margin-bottom:8px">กาดหวยโมฬี สาขาปาย</h1>
-      <p style="font-size:18px;color:var(--gray);margin-bottom:24px">เริ่มต้นใช้งาน กรุณาสร้างงวดก่อน</p>
-      <button class="btn bp" style="width:auto;padding:16px 32px" onclick="nav('periods')">📅 สร้างงวดแรก</button>
-    </div>`;
+  if(!d.ap)return`<div style="text-align:center;padding-top:60px" class="fi"><div style="font-size:64px;margin-bottom:16px">🎰</div><h1 style="font-size:24px;font-weight:900;color:var(--n);margin-bottom:8px">กาดหวยโมฬี สาขาปาย</h1><p style="font-size:18px;color:var(--gr);margin-bottom:24px">กรุณาสร้างงวดก่อน</p><button class="btn bp" style="width:auto;padding:16px 32px" onclick="nav('periods')">📅 สร้างงวดแรก</button></div>`;
+  const p=d.ap,pc=(S.devices||[]).filter(x=>x.status==='pending').length;
+  // Balance alert
+  let alertH='';
+  if(d.cs>0||d.lrv>0){
+    if(Math.abs(d.balCheck)>0)alertH=`<div class="alert-box alert-err">⚠️ ตัวเลขไม่สมดุล ${fmtB(Math.abs(d.balCheck))} — ตรวจสอบ Stock/เหลือ/จอง/ขาย</div>`;
+    else alertH=`<div class="alert-box alert-ok">✅ ตัวเลขสมดุล — Stock = เหลือ + จอง + ขาย</div>`;
   }
-  const p=d.activePeriod;
-  const pendingCount=(S.devices||[]).filter(x=>x.status==='pending').length;
   return`<div class="fi">
     <div style="text-align:center;margin-bottom:20px">
       <div style="font-size:48px;margin-bottom:8px">🎰</div>
-      <h1 style="font-size:24px;font-weight:900;color:var(--navy)">กาดหวยโมฬี สาขาปาย</h1>
-      <button onclick="nav('periods')" style="margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:8px 16px;border-radius:20px;font-size:16px;font-weight:700;background:var(--blue-light);color:var(--navy);border:2px solid var(--blue-mid);cursor:pointer;font-family:inherit">📅 ${p.name} <span style="font-size:14px;color:var(--gray)">(${thaiDate(p.startDate)}—${thaiDate(p.endDate)})</span> ▾</button>
-      <div style="font-size:16px;color:var(--gray);margin-top:8px">${S.role==='master'?'👑 เจ้าของ':'👤 พนักงาน'} • วันนี้: ${thaiDate(todayStr())}</div>
+      <h1 style="font-size:24px;font-weight:900;color:var(--n)">กาดหวยโมฬี สาขาปาย</h1>
+      <button onclick="nav('periods')" style="margin-top:8px;display:inline-flex;align-items:center;gap:4px;padding:8px 16px;border-radius:20px;font-size:15px;font-weight:700;background:var(--bl);color:var(--n);border:2px solid var(--bm);cursor:pointer;font-family:inherit">📅 ${p.name} <span style="font-size:13px;color:var(--gr)">(${tD(p.startDate)}—${tD(p.endDate)})</span> ▾</button>
+      <div style="font-size:15px;color:var(--gr);margin-top:8px">${S.role==='master'?'👑 เจ้าของ':'👤 พนักงาน'} • ${tD(today())}</div>
     </div>
-    <div class="g2" style="margin-bottom:20px">
-      ${cH('💰','ยอดขายสะสม',fmtB(d.cumulativeSales),'var(--navy)','var(--blue-light)')}
-      ${cH('🎯','ควรได้รับ',fmtB(d.shouldReceive),'var(--navy)','var(--blue-light)')}
-      ${cH('💵','เงินในมือ',fmtB(d.actualCash),d.diffFromShould>=0?'var(--green)':'var(--red)',d.diffFromShould>=0?'var(--green-light)':'var(--red-light)')}
-      ${cH(d.statusOk?'✅':'❌','สถานะ',!d.cumulativeSales&&!d.actualCash?'ยังไม่มีข้อมูล':d.statusOk?'เงินครบ':`ขาด ${fmtB(Math.abs(d.diffFromShould))}`,d.statusOk?'var(--green)':'var(--red)',d.statusOk?'var(--green-light)':'var(--red-light)')}
+    ${alertH}
+    <div class="g2" style="margin-bottom:16px">
+      ${cH('💰','ยอดขายสะสม',fmtB(d.cs),'var(--n)','var(--bl)')}
+      ${cH('🎯','ควรได้รับ',fmtB(d.sr),'var(--n)','var(--bl)')}
+      ${cH('📋','จองค้าง',fmtB(d.bkBal),'var(--o)','var(--ol)')}
+      ${cH('💸','ค้างโอน',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
     </div>
-    <div class="fc" style="gap:12px;margin-bottom:20px">
-      <button class="bb" style="background:linear-gradient(135deg,var(--navy),#1565C0)" onclick="nav('daily-main')"><div class="bb-c"><span class="bb-i">🏪</span><span class="bb-t">กรอกข้อมูลวันนี้ — ร้านใหญ่</span></div>${!d.todayRecordExists?'<span class="badge pulse">ยังไม่กรอก</span>':''}</button>
-      <button class="bb" style="background:linear-gradient(135deg,var(--teal),#00897B)" onclick="nav('daily-scan')"><div class="bb-c"><span class="bb-i">📱</span><span class="bb-t">กรอกข้อมูลวันนี้ — ร้านสแกน</span></div>${!d.todayScanExists?'<span class="badge pulse">ยังไม่กรอก</span>':''}</button>
+    <div class="fc" style="gap:12px;margin-bottom:16px">
+      <button class="bb" style="background:linear-gradient(135deg,var(--n),#1565C0)" onclick="nav('daily-main')"><div class="bbc"><span class="bbi">🏪</span><span class="bbt">กรอกข้อมูลวันนี้ — ร้านใหญ่</span></div>${!d.te?'<span class="bdg pulse">ยังไม่กรอก</span>':''}</button>
+      <button class="bb" style="background:linear-gradient(135deg,var(--t),#00897B)" onclick="nav('daily-scan')"><div class="bbc"><span class="bbi">📱</span><span class="bbt">กรอกข้อมูลวันนี้ — ร้านสแกน</span></div>${!d.tse?'<span class="bdg pulse">ยังไม่กรอก</span>':''}</button>
     </div>
     <div class="pn">
       <button class="nb" onclick="nav('stock')">📦 หวยเข้า-Stock</button>
-      <button class="nb" onclick="nav('bookings')">📋 ลูกค้าจอง (${(S.bookings||[]).filter(b=>b.status!=='✅ครบ').length})</button>
+      <button class="nb" onclick="nav('bookings')">📋 จอง ร้านใหญ่ <span style="font-size:14px;color:var(--o)">(${fmtB(d.bkBal)})</span></button>
+      <button class="nb" onclick="nav('scan-bookings')">📋 จอง ร้านสแกน <span style="font-size:14px;color:var(--o)">(${fmtB(d.scBkBal)})</span></button>
+      <button class="nb" onclick="nav('transfers')">💸 โอนเงิน <span style="font-size:14px;color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">(ค้าง ${fmtB(d.pendingTransfer)})</span></button>
       <button class="nb" onclick="nav('summary')">📊 สรุปงวด</button>
       <button class="nb" onclick="nav('history')">📜 ประวัติรายวัน</button>
       <hr class="dv">
       <button class="nb" onclick="nav('periods')">📅 จัดการงวด</button>
-      ${S.role==='master'?`<button class="nb" style="color:var(--purple)" onclick="loadDevices().then(()=>{nav('devices')})">📱 จัดการอุปกรณ์${pendingCount?` <span style="background:var(--red);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px">${pendingCount} รอนุมัติ</span>`:''}</button>`:''}
-      <button class="nb" style="color:var(--red)" onclick="doLogout()">🔒 ออกจากระบบ</button>
+      ${S.role==='master'?`<button class="nb" style="color:var(--p)" onclick="loadDevs().then(()=>nav('devices'))">📱 จัดการอุปกรณ์${pc?` <span style="background:var(--r);color:#fff;font-size:12px;padding:2px 8px;border-radius:10px">${pc}</span>`:''}</button>`:''}
+      <button class="nb" style="color:var(--r)" onclick="doLogout()">🔒 ออกจากระบบ</button>
     </div>
   </div>`;
 }
 
-function cH(i,t,v,c,b){return`<div class="card" style="background:${b}"><div class="card-t">${i} ${t}</div><div class="card-v" style="color:${c}">${v}</div></div>`}
+function cH(i,t,v,c,b){return`<div class="cd" style="background:${b}"><div class="ct">${i} ${t}</div><div class="cv" style="color:${c}">${v}</div></div>`}
 
 // ============================================================
-// PERIODS
+// DAILY MAIN (2 Steps)
 // ============================================================
-function renderPeriods(d){
-  let fH='';
-  if(S.showPeriodForm){
-    const ok=S.pName&&S.pStart&&S.pEnd;
-    fH=`<div class="pn fi" style="border:2px solid var(--blue-mid);margin-bottom:20px">
-      <h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:16px">สร้างงวดใหม่</h3>
-      <div class="ig"><label class="il">ชื่องวด</label><input type="text" class="ii" id="pN" value="${S.pName}" placeholder="เช่น งวด 1 เม.ย. 69" style="font-size:20px"></div>
-      <div class="ig"><label class="il">📆 วันเริ่มต้น</label><input type="date" class="ii" id="pS" value="${S.pStart}" style="font-size:20px"></div>
-      <div class="ig"><label class="il">📆 วันสิ้นสุด</label><input type="date" class="ii" id="pE" value="${S.pEnd}" style="font-size:20px"></div>
-      ${S.pStart&&S.pEnd?`<div class="card" style="text-align:center;background:var(--green-light);margin-bottom:16px"><div class="card-v" style="font-size:18px;color:var(--green)">${thaiDate(S.pStart)} — ${thaiDate(S.pEnd)}</div></div>`:''}
-      <div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showPeriodForm=false;render()">ยกเลิก</button><button class="btn ${ok?'bp':'bd'} f1" onclick="createPeriod()">✅ สร้าง</button></div></div>`;
+function renderDM(d){
+  if(!S.formMain){const ex=(S.daily||[]).find(r=>r.date===today());S.formMain=ex?{...ex}:{date:today(),cashSales:0,transferSales:0,remainSingles:0,remainSet2:0,remainSet3:0,remainSet5:0,remainSet10:0,note:''}}
+  const f=S.formMain,st=S.stepMain;
+  const ts=(f.cashSales||0)+(f.transferSales||0);
+  const prevSales=(S.daily||[]).filter(r=>r.date!==f.date).reduce((s,r)=>s+(r.cashSales||0)+(r.transferSales||0),0);
+  const cumSales=prevSales+ts;
+  const rv=cRV(f);
+
+  let sH='';
+  if(st===1){
+    sH=`<div class="fi">
+      <h3 style="font-size:18px;font-weight:700;color:var(--nd);margin-bottom:12px">💰 ยอดขาย</h3>
+      ${nI('เงินสด','fmC',f.cashSales,'฿')}
+      ${nI('โอน','fmT',f.transferSales,'฿')}
+      <div class="cd" style="text-align:center;background:var(--gl);margin-bottom:12px">
+        <div style="font-size:14px;font-weight:600;color:var(--g)">ยอดขายวันนี้</div>
+        <div style="font-size:28px;font-weight:900;color:#1B5E20">${fmtB(ts)}</div>
+      </div>
+      <div class="cd" style="text-align:center;background:var(--bl)">
+        <div style="font-size:14px;font-weight:600;color:var(--n)">📊 ยอดขายสะสมตั้งแต่ต้นงวด</div>
+        <div style="font-size:24px;font-weight:900;color:var(--n)">${fmtB(cumSales)}</div>
+      </div>
+    </div>`;
+  } else {
+    sH=`<div class="fi">
+      <h3 style="font-size:18px;font-weight:700;color:var(--nd);margin-bottom:12px">🎟️ หวยเหลือ</h3>
+      ${TY.map(t=>nI(`${t.l} (${t.p}฿)`,`fm_${t.r}`,f[t.r],'ใบ/ชุด')).join('')}
+      <div class="cd" style="text-align:center;background:var(--bl);margin-bottom:12px">
+        <div style="font-size:14px;font-weight:600;color:var(--n)">มูลค่าหวยเหลือ</div>
+        <div style="font-size:28px;font-weight:900;color:var(--n)">${fmtB(rv)}</div>
+      </div>
+      <div class="ig">
+        <label class="il">📝 หมายเหตุ (ถ้ามี)</label>
+        <input type="text" class="iit" id="fmNote" value="${f.note||''}" placeholder="เช่น หวยชำรุด 1 ใบ">
+      </div>
+    </div>`;
   }
-  const lH=[...(S.periods||[])].reverse().map(p=>{
-    const ia=p.id===S.activePeriodId;
-    return`<div class="pn" style="margin-bottom:12px;border:2px solid ${ia?'var(--navy)':'var(--blue-light)'};${ia?'background:var(--blue-light)':''}">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <div style="flex:1;cursor:pointer" onclick="selectPeriod('${p.id}')">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${ia?'<span style="background:#1A237E;color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px">กำลังใช้</span>':''}<span style="font-size:18px;font-weight:900;color:var(--navy)">${p.name}</span></div>
-          <div style="font-size:16px;color:var(--gray)">${thaiDate(p.startDate)} — ${thaiDate(p.endDate)}</div>
-        </div>
-        <div style="display:flex;gap:8px">
-          ${!ia?`<button class="bs" style="background:var(--navy);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="selectPeriod('${p.id}')">เลือก</button>`:''}
-          <button class="bs" style="background:#FFEBEE;color:var(--red);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="deletePeriod('${p.id}')">🗑️</button>
-        </div></div></div>`}).join('');
   return`<div class="fi">
-    ${d.activePeriod?'<button class="bk" onclick="nav(\'home\')">← กลับ</button>':''}
-    <h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:8px">📅 จัดการงวด</h2>
-    <p style="font-size:16px;color:var(--gray);margin-bottom:16px">สร้างงวดใหม่ หรือเลือกงวดที่ต้องการ</p>
-    ${!S.showPeriodForm?`<button class="btn bp" style="margin-bottom:20px" onclick="S.showPeriodForm=true;render()">➕ สร้างงวดใหม่</button>`:''} ${fH} ${lH}
-    ${!(S.periods||[]).length?'<div style="text-align:center;padding:40px 0"><div style="font-size:48px;margin-bottom:12px">📅</div><div style="font-size:20px;font-weight:700;color:var(--gray-light)">ยังไม่มีงวด</div></div>':''}
+    <button class="bk" onclick="S.formMain=null;S.stepMain=1;nav('home')">← กลับ</button>
+    <h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:4px">🏪 กรอกข้อมูลร้านใหญ่</h2>
+    <div style="font-size:15px;color:var(--gr);margin-bottom:16px">${tD(today())} • ${d.ap?.name||''}</div>
+    <div class="pw"><div class="pbl">ขั้นตอน ${st}/2</div><div class="pbr"><div class="pbf" style="width:${st/2*100}%"></div></div></div>
+    ${sH}
+    <div class="fr" style="gap:12px;margin-top:24px">
+      ${st>1?`<button class="btn bo f1" onclick="rdM();S.stepMain--;render()">← ก่อนหน้า</button>`:''}
+      ${st<2?`<button class="btn bp f1" onclick="rdM();S.stepMain++;render()">ถัดไป →</button>`
+        :`<button class="btn bg f1" onclick="rdM();svM()">💾 บันทึก</button>`}
+    </div>
   </div>`;
 }
 
 // ============================================================
-// DAILY MAIN
+// DAILY SCAN (2 Steps)
 // ============================================================
-function renderDM(d){
-  if(!S.formMain){const ex=(S.daily||[]).find(r=>r.date===todayStr());S.formMain=ex?{...ex}:{date:todayStr(),cashSales:0,transferSales:0,remainSingles:0,remainSet2:0,remainSet3:0,remainSet5:0,remainSet10:0,bookingCount:0,bookingValue:0,actualCash:0}}
-  const f=S.formMain,st=S.stepMain,ts=(f.cashSales||0)+(f.transferSales||0),rv=calcRV(f),sr=d.totalStockValue-rv-(f.bookingValue||0),df=(f.actualCash||0)-sr;
+function renderDS(d){
+  if(!S.formScan){const ex=(S.scan||[]).find(r=>r.date===today());const pv=(S.scan||[]).filter(r=>r.date<today()).sort((a,b)=>a.date.localeCompare(b.date)).pop();S.formScan=ex?{...ex}:{date:today(),receiveSingles:0,receiveSet2:0,sellSingles:0,sellSet2:0,_pRS:pv?.remainSingles||0,_pRS2:pv?.remainSet2||0,note:''};if(!S.formScan._pRS&&!ex){S.formScan._pRS=pv?.remainSingles||0;S.formScan._pRS2=pv?.remainSet2||0}}
+  const f=S.formScan,st=S.stepScan,prs=f._pRS||0,prs2=f._pRS2||0;
+  const cS=(f.receiveSingles||0)*80,cS2=(f.receiveSet2||0)*160;
+  const pS=(f.sellSingles||0)*10,pS2=(f.sellSet2||0)*40;
+  const rS=prs+(f.receiveSingles||0)-(f.sellSingles||0),rS2=prs2+(f.receiveSet2||0)-(f.sellSet2||0);
+  const prevProfit=(S.scan||[]).filter(r=>r.date!==f.date).reduce((s,r)=>s+(r.sellSingles||0)*10+(r.sellSet2||0)*40,0);
+  const todayProfit=pS+pS2;
+
   let sH='';
-  if(st===1)sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">💰 ยอดขาย</h3>${nI('เงินสด','fmC',f.cashSales,'฿')}${nI('โอน','fmT',f.transferSales,'฿')}<div class="card" style="text-align:center;background:var(--green-light)"><div style="font-size:14px;font-weight:600;color:var(--green)">ยอดขายรวมวันนี้</div><div style="font-size:30px;font-weight:900;color:#1B5E20">${fmtB(ts)}</div></div></div>`;
-  else if(st===2)sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">🎟️ หวยเหลือ</h3>${TYPES.map(t=>nI(`${t.label} (${t.price}฿)`,`fm_${t.rkey}`,f[t.rkey],'ใบ/ชุด')).join('')}<div class="card" style="text-align:center;background:var(--blue-light)"><div style="font-size:14px;font-weight:600;color:var(--navy)">มูลค่าหวยเหลือ</div><div style="font-size:30px;font-weight:900;color:var(--navy)">${fmtB(rv)}</div></div></div>`;
-  else if(st===3)sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">📋 ลูกค้าจองค้าง</h3>${nI('จำนวนจองค้าง','fmBC',f.bookingCount,'ใบ')}${nI('มูลค่าจองค้าง','fmBV',f.bookingValue,'฿')}</div>`;
-  else sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">💵 เงินสดในมือ</h3>${nI('เงินสดจริง','fmA',f.actualCash,'฿')}<div class="fc" style="gap:12px;margin-top:16px"><div class="card" style="background:var(--blue-light)"><div style="font-size:14px">มูลค่า Stock ทั้งหมด</div><div style="font-size:20px;font-weight:700;color:var(--navy)">${fmtB(d.totalStockValue)}</div></div><div class="card" style="background:var(--blue-light)"><div style="font-size:14px">ควรได้รับ (Stock-เหลือ-จอง)</div><div style="font-size:20px;font-weight:700;color:var(--navy)">${fmtB(sr)}</div></div><div class="card" style="background:${df>=0?'var(--green-light)':'var(--red-light)'}"><div style="font-size:14px">ผลต่าง (เงินจริง-ควรได้)</div><div style="font-size:24px;font-weight:900;color:${df>=0?'var(--green)':'var(--red)'}">${df>=0?'+':''}${fmtB(df)}</div><span class="${df>=0?'sok':'sbd'}">${df>=0?'✅ เงินครบ':`❌ ขาด ${fmtB(Math.abs(df))}`}</span></div></div></div>`;
-  return`<div class="fi"><button class="bk" onclick="S.formMain=null;S.stepMain=1;nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:4px">🏪 กรอกข้อมูลร้านใหญ่</h2><div style="font-size:16px;color:var(--gray);margin-bottom:16px">${thaiDate(todayStr())} • ${d.activePeriod?.name||''}</div><div class="pw"><div class="pl">ขั้นตอน ${st}/4</div><div class="pb"><div class="pf" style="width:${st/4*100}%"></div></div></div>${sH}<div class="fr" style="gap:12px;margin-top:24px">${st>1?`<button class="btn bo f1" onclick="rdM();S.stepMain--;render()">← ก่อนหน้า</button>`:''} ${st<4?`<button class="btn bp f1" onclick="rdM();S.stepMain++;render()">ถัดไป →</button>`:`<button class="btn bg f1" onclick="rdM();svM()">💾 บันทึก</button>`}</div></div>`;
+  if(st===1){
+    sH=`<div class="fi">
+      <h3 style="font-size:18px;font-weight:700;color:var(--t);margin-bottom:12px">📥 รับเข้าวันนี้</h3>
+      ${nI('ใบเดี่ยว','fsRS',f.receiveSingles,'ใบ')}
+      ${nI('ชุด 2 ใบ','fsRS2',f.receiveSet2,'ชุด')}
+      <div class="cd" style="text-align:center;background:var(--tl)">
+        <div style="font-size:14px;font-weight:600;color:var(--t)">ต้นทุนวันนี้</div>
+        <div style="font-size:24px;font-weight:900;color:#004D40">${fmtB(cS+cS2)}</div>
+      </div>
+    </div>`;
+  } else {
+    sH=`<div class="fi">
+      <h3 style="font-size:18px;font-weight:700;color:var(--t);margin-bottom:12px">📤 ขายออก</h3>
+      ${nI('ขายใบเดี่ยว','fsSS',f.sellSingles,'ใบ')}
+      ${nI('ขายชุด 2','fsSS2',f.sellSet2,'ชุด')}
+      <div class="g2" style="margin-top:12px;margin-bottom:12px">
+        <div class="cd" style="text-align:center;background:var(--gl)"><div style="font-size:14px">กำไรวันนี้</div><div style="font-size:20px;font-weight:700;color:var(--g)">${fmtB(todayProfit)}</div></div>
+        <div class="cd" style="text-align:center;background:var(--bl)"><div style="font-size:14px">คงเหลือ</div><div style="font-size:18px;font-weight:700;color:var(--n)">${rS} เดี่ยว/${rS2} ชุด</div></div>
+      </div>
+      <div class="cd" style="text-align:center;background:var(--bl);margin-bottom:12px">
+        <div style="font-size:14px;font-weight:600;color:var(--n)">📊 กำไรสะสม (ก่อนหักค่าน้ำใจ)</div>
+        <div style="font-size:22px;font-weight:900;color:var(--n)">${fmtB(prevProfit+todayProfit)}</div>
+      </div>
+      <div class="ig">
+        <label class="il">📝 หมายเหตุ (ถ้ามี)</label>
+        <input type="text" class="iit" id="fsNote" value="${f.note||''}" placeholder="เช่น หวยสแกนไม่ผ่าน 2 ใบ">
+      </div>
+    </div>`;
+  }
+  return`<div class="fi">
+    <button class="bk" onclick="S.formScan=null;S.stepScan=1;nav('home')">← กลับ</button>
+    <h2 style="font-size:20px;font-weight:900;color:var(--t);margin-bottom:4px">📱 กรอกข้อมูลร้านสแกน</h2>
+    <div style="font-size:15px;color:var(--gr);margin-bottom:16px">${tD(today())} • ${d.ap?.name||''}</div>
+    <div class="pw"><div class="pbl">ขั้นตอน ${st}/2</div><div class="pbr"><div class="pbf" style="width:${st/2*100}%"></div></div></div>
+    ${sH}
+    <div class="fr" style="gap:12px;margin-top:24px">
+      ${st>1?`<button class="btn bo f1" style="border-color:var(--t);color:var(--t)" onclick="rdS();S.stepScan--;render()">← ก่อนหน้า</button>`:''}
+      ${st<2?`<button class="btn bt f1" onclick="rdS();S.stepScan++;render()">ถัดไป →</button>`
+        :`<button class="btn bg f1" onclick="rdS();svS()">💾 บันทึก</button>`}
+    </div>
+  </div>`;
 }
 
 // ============================================================
-// DAILY SCAN
+// BOOKINGS (Main shop) — Movement-based
 // ============================================================
-function renderDS(d){
-  if(!S.formScan){const ex=(S.scan||[]).find(r=>r.date===todayStr());const pv=(S.scan||[]).filter(r=>r.date<todayStr()).sort((a,b)=>a.date.localeCompare(b.date)).pop();S.formScan=ex?{...ex}:{date:todayStr(),receiveSingles:0,receiveSet2:0,sellSingles:0,sellSet2:0,scanFee:0,_pRS:pv?.remainSingles||0,_pRS2:pv?.remainSet2||0};if(!S.formScan._pRS&&!ex){S.formScan._pRS=pv?.remainSingles||0;S.formScan._pRS2=pv?.remainSet2||0}}
-  const f=S.formScan,st=S.stepScan,prs=f._pRS||0,prs2=f._pRS2||0;
-  const cS=(f.receiveSingles||0)*80,cS2=(f.receiveSet2||0)*160,pS=(f.sellSingles||0)*10,pS2=(f.sellSet2||0)*40,np=pS+pS2-(f.scanFee||0),rS=prs+(f.receiveSingles||0)-(f.sellSingles||0),rS2=prs2+(f.receiveSet2||0)-(f.sellSet2||0);
-  let sH='';
-  if(st===1)sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--teal);margin-bottom:12px">📥 รับเข้าวันนี้</h3>${nI('ใบเดี่ยว','fsRS',f.receiveSingles,'ใบ')}${nI('ชุด 2 ใบ','fsRS2',f.receiveSet2,'ชุด')}<div class="card" style="text-align:center;background:var(--teal-light)"><div style="font-size:14px;font-weight:600;color:var(--teal)">ต้นทุนวันนี้</div><div style="font-size:24px;font-weight:900;color:#004D40">${fmtB(cS+cS2)}</div></div></div>`;
-  else if(st===2)sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--teal);margin-bottom:12px">📤 ขายออก</h3>${nI('ขายใบเดี่ยว','fsSS',f.sellSingles,'ใบ')}${nI('ขายชุด 2','fsSS2',f.sellSet2,'ชุด')}<div class="g2" style="margin-top:12px"><div class="card" style="text-align:center;background:var(--green-light)"><div style="font-size:14px">กำไรวันนี้</div><div style="font-size:20px;font-weight:700;color:var(--green)">${fmtB(pS+pS2)}</div></div><div class="card" style="text-align:center;background:var(--blue-light)"><div style="font-size:14px">คงเหลือ</div><div style="font-size:18px;font-weight:700;color:var(--navy)">${rS} เดี่ยว/${rS2} ชุด</div></div></div></div>`;
-  else sH=`<div class="fi"><h3 style="font-size:18px;font-weight:700;color:var(--teal);margin-bottom:12px">🙏 ค่าน้ำใจคนสแกน</h3>${nI('ค่าน้ำใจ','fsF',f.scanFee,'฿')}<div class="card" style="text-align:center;margin-top:12px;background:${np>=0?'var(--green-light)':'var(--red-light)'}"><div style="font-size:14px;font-weight:600">กำไรสุทธิวันนี้</div><div style="font-size:30px;font-weight:900;color:${np>=0?'var(--green)':'var(--red)'}">${fmtB(np)}</div></div></div>`;
-  return`<div class="fi"><button class="bk" onclick="S.formScan=null;S.stepScan=1;nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--teal);margin-bottom:4px">📱 กรอกข้อมูลร้านสแกน</h2><div style="font-size:16px;color:var(--gray);margin-bottom:16px">${thaiDate(todayStr())} • ${d.activePeriod?.name||''}</div><div class="pw"><div class="pl">ขั้นตอน ${st}/3</div><div class="pb"><div class="pf" style="width:${st/3*100}%"></div></div></div>${sH}<div class="fr" style="gap:12px;margin-top:24px">${st>1?`<button class="btn bot f1" onclick="rdS();S.stepScan--;render()">← ก่อนหน้า</button>`:''} ${st<3?`<button class="btn bt f1" onclick="rdS();S.stepScan++;render()">ถัดไป →</button>`:`<button class="btn bg f1" onclick="rdS();svS()">💾 บันทึก</button>`}</div></div>`;
+function renderBk(d){
+  const items=S.bookings||[];
+  const bal=d.bkBal;
+  const totalAdd=items.filter(b=>b.type==='add').reduce((s,b)=>s+(b.amount||0),0);
+  const totalCut=items.filter(b=>b.type==='cut').reduce((s,b)=>s+(b.amount||0),0);
+
+  let formH='';
+  if(S.bkMode==='add'){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)">
+      <h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">➕ เพิ่มยอดจอง</h3>
+      ${nI('จำนวนเงิน','bkAmt',S.bkAmount,'฿')}
+      <div class="ig"><label class="il">หมายเหตุ (ถ้ามี)</label><input type="text" class="iit" id="bkNote" value="${S.bkNote}" placeholder="เช่น ลูกค้า 20 คน"></div>
+      <div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.bkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="addBk()">✅ บันทึก</button></div>
+    </div>`;
+  } else if(S.bkMode==='cut'){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--o)">
+      <h3 style="font-size:18px;font-weight:700;color:var(--o);margin-bottom:12px">➖ ลูกค้ามารับหวย</h3>
+      ${nI('จำนวนเงินที่ตัด','bkAmt',S.bkAmount,'฿')}
+      <div class="ig"><label class="il">หมายเหตุ (ถ้ามี)</label><input type="text" class="iit" id="bkNote" value="${S.bkNote}" placeholder="เช่น ลูกค้า 3 คน"></div>
+      <div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.bkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="cutBk()">✅ บันทึก</button></div>
+    </div>`;
+  }
+
+  const histH=items.length?[...items].reverse().map(b=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}">
+    <div class="fr" style="justify-content:space-between;align-items:center">
+      <div><span style="font-weight:700;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'➕ เพิ่มจอง':'➖ มารับหวย'}</span> <span style="font-size:14px;color:var(--gr)">${tD(b.date)}</span></div>
+      <span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span>
+    </div>
+    ${b.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${b.note}</div>`:''}
+  </div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
+
+  return`<div class="fi">
+    <button class="bk" onclick="nav('home')">← กลับ</button>
+    <h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">📋 จอง ร้านใหญ่ — ${d.ap?.name||''}</h2>
+    <div class="g2" style="margin-bottom:16px">
+      ${cH('📋','จองค้างคงเหลือ',fmtB(bal),'var(--o)','var(--ol)')}
+      ${cH('📊','จองรวม/มารับรวม',`+${fmtB(totalAdd)} / −${fmtB(totalCut)}`,'var(--n)','var(--bl)')}
+    </div>
+    ${!S.bkMode?`<div class="fr" style="gap:12px;margin-bottom:16px">
+      <button class="btn bg f1" onclick="S.bkMode='add';S.bkAmount=0;S.bkNote='';render()">➕ เพิ่มจอง</button>
+      <button class="btn bp f1" onclick="S.bkMode='cut';S.bkAmount=0;S.bkNote='';render()">➖ มารับหวย</button>
+    </div>`:''}
+    ${formH}
+    <h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัติ</h3>
+    ${histH}
+  </div>`;
+}
+
+// Scan bookings — same pattern
+function renderSBk(d){
+  const items=S.scanBookings||[];
+  const bal=d.scBkBal;
+  let formH='';
+  if(S.sbkMode==='add'){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)"><h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">➕ เพิ่มยอดจอง</h3>${nI('จำนวนเงิน','sbkAmt',S.sbkAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="sbkNote" value="${S.sbkNote}" placeholder=""></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.sbkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="addSBk()">✅ บันทึก</button></div></div>`;
+  } else if(S.sbkMode==='cut'){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--o)"><h3 style="font-size:18px;font-weight:700;color:var(--o);margin-bottom:12px">➖ ลูกค้ามารับหวย</h3>${nI('จำนวนเงิน','sbkAmt',S.sbkAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="sbkNote" value="${S.sbkNote}" placeholder=""></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.sbkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="cutSBk()">✅ บันทึก</button></div></div>`;
+  }
+  const histH=items.length?[...items].reverse().map(b=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'➕ เพิ่มจอง':'➖ มารับหวย'}</span> <span style="font-size:14px;color:var(--gr)">${tD(b.date)}</span></div><span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span></div>${b.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${b.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
+
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--t);margin-bottom:16px">📋 จอง ร้านสแกน — ${d.ap?.name||''}</h2>
+    <div class="cd" style="text-align:center;background:var(--ol);margin-bottom:16px"><div class="ct">📋 จองค้างคงเหลือ</div><div class="cv" style="color:var(--o)">${fmtB(bal)}</div></div>
+    ${!S.sbkMode?`<div class="fr" style="gap:12px;margin-bottom:16px"><button class="btn bg f1" onclick="S.sbkMode='add';S.sbkAmount=0;S.sbkNote='';render()">➕ เพิ่มจอง</button><button class="btn bt f1" onclick="S.sbkMode='cut';S.sbkAmount=0;S.sbkNote='';render()">➖ มารับหวย</button></div>`:''}
+    ${formH}<h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัติ</h3>${histH}</div>`;
+}
+
+// ============================================================
+// TRANSFERS
+// ============================================================
+function renderTf(d){
+  const items=S.transfers||[];
+  const total=d.totalTransferred;
+  let formH='';
+  if(S.showTfForm){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)"><h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">💸 บันทึกโอนเงิน</h3>${nI('จำนวนที่โอน','tfAmt',S.tfAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="tfNote" value="${S.tfNote}" placeholder="เช่น โอนเข้าบัญชี xxx"></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showTfForm=false;render()">ยกเลิก</button><button class="btn bg f1" onclick="addTf()">✅ บันทึก</button></div></div>`;
+  }
+  const histH=items.length?[...items].reverse().map(t=>`<div class="mv mv-cut"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:var(--g)">💸 โอนเงิน</span> <span style="font-size:14px;color:var(--gr)">${tD(t.date)}</span></div><span style="font-size:18px;font-weight:900;color:var(--g)">${fmtB(t.amount)}</span></div>${t.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${t.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีการโอน</div>';
+
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">💸 โอนเงิน — ${d.ap?.name||''}</h2>
+    <div class="g2" style="margin-bottom:16px">
+      ${cH('💰','ขายสะสม',fmtB(d.cs),'var(--n)','var(--bl)')}
+      ${cH('💸','โอนแล้ว',fmtB(total),'var(--g)','var(--gl)')}
+    </div>
+    <div class="cd" style="text-align:center;margin-bottom:16px;background:${d.pendingTransfer>0?'var(--ol)':'var(--gl)'}"><div class="ct">💵 ค้างโอน</div><div class="cv" style="color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">
+      ${fmtB(d.pendingTransfer)}</div></div>
+    ${!S.showTfForm?`<button class="btn bp" style="margin-bottom:16px" onclick="S.showTfForm=true;S.tfAmount=0;S.tfNote='';render()">💸 บันทึกโอนเงิน</button>`:''}
+    ${formH}<h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัติโอน</h3>${histH}</div>`;
 }
 
 // ============================================================
 // STOCK
 // ============================================================
 function renderSt(d){
-  if(!S.formStock)S.formStock={date:todayStr(),singles:0,set2:0,set3:0,set5:0,set10:0};
-  const f=S.formStock,ev=TYPES.reduce((s,t)=>s+(f[t.key]||0)*t.price,0);
-  const lH=(S.stock||[]).map((e,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--blue-light)"><div><div style="font-weight:700;color:var(--navy)">${thaiDate(e.date)}</div><div style="font-size:14px;color:var(--gray)">${TYPES.filter(t=>e[t.key]>0).map(t=>`${t.label}:${e[t.key]}`).join(' | ')}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px;font-weight:700;color:#1B5E20">${fmtB(e.totalValue)}</span><button style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--red)" onclick="delSt(${i})">🗑️</button></div></div>`).join('');
-  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:16px">📦 หวยเข้า-Stock — ${d.activePeriod?.name||''}</h2><div class="card" style="text-align:center;margin-bottom:16px"><div style="font-size:14px">มูลค่า Stock สะสม</div><div style="font-size:30px;font-weight:900;color:var(--navy)">${fmtB(d.totalStockValue)}</div></div><div class="pn" style="margin-bottom:16px"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">➕ บันทึกหวยเข้าใหม่</h3><div class="ig"><label class="il">📆 วันที่รับเข้า</label><input type="date" class="ii" id="stD" value="${f.date}" style="font-size:20px"></div>${TYPES.map(t=>nI(`${t.label} (${t.price}฿)`,`st_${t.key}`,f[t.key],'ใบ/ชุด')).join('')}<div class="card" style="text-align:center;background:var(--green-light);margin-bottom:12px"><div style="font-size:14px">มูลค่ารอบนี้</div><div style="font-size:24px;font-weight:700;color:var(--green)">${fmtB(ev)}</div></div><button class="btn ${ev>0?'bp':'bd'}" onclick="svSt()">💾 บันทึก</button></div>${(S.stock||[]).length?`<div class="pn"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">📋 ประวัติหวยเข้า</h3>${lH}</div>`:''}</div>`;
-}
-
-// ============================================================
-// BOOKINGS
-// ============================================================
-function renderBk(d){
-  const tbv=(S.bookings||[]).filter(b=>b.status!=='✅ครบ').reduce((s,b)=>s+(b.bookingValue||0),0);
-  let fH='';
-  if(S.showBookingForm){
-    if(!S.formBooking)S.formBooking={customerName:'',singles:0,set2:0,set3:0,set5:0,set10:0};
-    const bf=S.formBooking,bv=TYPES.reduce((s,t)=>s+(bf[t.key]||0)*t.price,0);
-    fH=`<div class="pn fi" style="margin-bottom:16px"><h3 style="font-size:18px;font-weight:700;color:var(--navy-dark);margin-bottom:12px">เพิ่มลูกค้าจอง</h3><div class="ig"><label class="il">ชื่อลูกค้า</label><input type="text" class="ii" id="bkN" value="${bf.customerName}" placeholder="ชื่อลูกค้า" style="font-size:20px"></div>${TYPES.map(t=>nI(t.label,`bk_${t.key}`,bf[t.key],'ใบ/ชุด')).join('')}<div class="card" style="text-align:center;margin-bottom:12px"><div style="font-size:14px">มูลค่าจอง</div><div style="font-size:20px;font-weight:700;color:var(--navy)">${fmtB(bv)}</div></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showBookingForm=false;S.formBooking=null;render()">ยกเลิก</button><button class="btn bp f1" onclick="svBk()">💾 บันทึก</button></div></div>`;
-  }
-  const lH=(S.bookings||[]).map(b=>{
-    const bc=b.status==='✅ครบ'?'#A5D6A7':b.status==='⚠️ไม่ครบ'?'#FFE082':'var(--blue-mid)';
-    return`<div style="background:#fff;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:2px solid ${bc}"><div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px"><div><div style="font-size:18px;font-weight:700;color:var(--navy)">${b.customerName}</div><div style="font-size:14px;color:var(--gray)">มูลค่า: ${fmtB(b.bookingValue)}</div>${b.paidDate?`<div style="font-size:12px;color:#78909C">จ่าย: ${thaiDate(b.paidDate)} — ${fmtB(b.paidAmount||0)}</div>`:''}</div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px;font-weight:700">${b.status}</span><button style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--red)" onclick="delBk('${b.id}')">🗑️</button></div></div>${b.status==='⏳รอ'?`<div class="fr" style="gap:8px"><button class="bs f1" style="background:var(--green);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="upBk('${b.id}','✅ครบ',${b.bookingValue})">จ่ายครบ</button><button class="bs f1" style="background:#F9A825;color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="upBk('${b.id}','⚠️ไม่ครบ',0)">จ่ายไม่ครบ</button></div>`:''}</div>`}).join('');
-  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:16px">📋 ลูกค้าจอง — ${d.activePeriod?.name||''}</h2><div class="card" style="text-align:center;background:var(--orange-light);margin-bottom:16px"><div style="font-size:14px">มูลค่าจองค้างทั้งหมด</div><div style="font-size:24px;font-weight:700;color:var(--orange)">${fmtB(tbv)}</div></div>${!S.showBookingForm?`<button class="btn bp" style="margin-bottom:16px" onclick="S.showBookingForm=true;S.formBooking=null;render()">➕ เพิ่มลูกค้าจอง</button>`:''} ${fH}${!(S.bookings||[]).length?'<div style="text-align:center;padding:32px 0;font-size:18px;color:var(--gray-light)">ยังไม่มีลูกค้าจอง</div>':''}${lH}</div>`;
+  if(!S.formStock)S.formStock={date:today(),singles:0,set2:0,set3:0,set5:0,set10:0};
+  const f=S.formStock,ev=TY.reduce((s,t)=>s+(f[t.k]||0)*t.p,0);
+  const lH=(S.stock||[]).map((e,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:12px;border-bottom:1px solid var(--bl)"><div><div style="font-weight:700;color:var(--n)">${tD(e.date)}</div><div style="font-size:14px;color:var(--gr)">${TY.filter(t=>e[t.k]>0).map(t=>`${t.l}:${e[t.k]}`).join(' | ')}</div></div><div style="display:flex;align-items:center;gap:8px"><span style="font-size:18px;font-weight:700;color:#1B5E20">${fmtB(e.totalValue)}</span><button style="background:none;border:none;cursor:pointer;font-size:14px;color:var(--r)" onclick="delSt(${i})">🗑️</button></div></div>`).join('');
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">📦 หวยเข้า-Stock</h2><div class="cd" style="text-align:center;margin-bottom:16px"><div style="font-size:14px">มูลค่า Stock สะสม</div><div style="font-size:30px;font-weight:900;color:var(--n)">${fmtB(d.tsv)}</div></div><div class="pn" style="margin-bottom:16px"><h3 style="font-size:18px;font-weight:700;color:var(--nd);margin-bottom:12px">➕ บันทึกหวยเข้า</h3><div class="ig"><label class="il">📆 วันที่</label><input type="date" class="ii" id="stD" value="${f.date}" style="font-size:20px"></div>${TY.map(t=>nI(`${t.l} (${t.p}฿)`,`st_${t.k}`,f[t.k],'ใบ/ชุด')).join('')}<div class="cd" style="text-align:center;background:var(--gl);margin-bottom:12px"><div style="font-size:14px">มูลค่ารอบนี้</div><div style="font-size:24px;font-weight:700;color:var(--g)">${fmtB(ev)}</div></div><button class="btn ${ev>0?'bp':'bd'}" onclick="svSt()">💾 บันทึก</button></div>${(S.stock||[]).length?`<div class="pn"><h3 style="font-size:18px;font-weight:700;color:var(--nd);margin-bottom:12px">📋 ประวัติ</h3>${lH}</div>`:''}</div>`;
 }
 
 // ============================================================
 // SUMMARY
 // ============================================================
 function renderSum(d){
-  const tab=S.summaryTab,rv=d.latestRemainValue;
+  const tab=S.summaryTab;
+  // Scan
   const scRS=(S.scan||[]).reduce((s,r)=>s+(r.receiveSingles||0),0),scRS2=(S.scan||[]).reduce((s,r)=>s+(r.receiveSet2||0),0);
   const scSS=(S.scan||[]).reduce((s,r)=>s+(r.sellSingles||0),0),scSS2=(S.scan||[]).reduce((s,r)=>s+(r.sellSet2||0),0);
-  const scC=scRS*80+scRS2*160,scR=scSS*90+scSS2*200,scF=(S.scan||[]).reduce((s,r)=>s+(r.scanFee||0),0),scN=scR-scC-scF;
-  const scRemS=(S.scan||[]).length?S.scan[S.scan.length-1].remainSingles||0:0,scRemS2=(S.scan||[]).length?S.scan[S.scan.length-1].remainSet2||0:0;
-  const mC=`${cH('📦','มูลค่า Stock รับเข้า',fmtB(d.totalStockValue),'var(--navy)','var(--blue-light)')}${cH('💰','ยอดขายจริง (สะสม)',fmtB(d.cumulativeSales),'var(--green)','var(--green-light)')}${cH('🎟️','มูลค่าหวยเหลือ',fmtB(rv),'var(--orange)','var(--orange-light)')}${cH('📋','มูลค่าจองค้าง',fmtB(d.totalBookingValue),'var(--purple)','var(--purple-light)')}${cH('💵','เงินในมือ',fmtB(d.actualCash),'var(--navy)','var(--blue-light)')}${cH('🎯','ควรได้รับ',fmtB(d.shouldReceive),'var(--navy)','var(--blue-light)')}${cH(d.diffFromShould>=0?'✅':'❌','ผลต่าง',`${d.diffFromShould>=0?'+':''}${fmtB(d.diffFromShould)}`,d.diffFromShould>=0?'var(--green)':'var(--red)',d.diffFromShould>=0?'var(--green-light)':'var(--red-light)')}<button class="btn bo" onclick="cpM()">📋 คัดลอกสรุป</button>`;
-  const sC=`${cH('📥','รับเข้าทั้งหมด',`เดี่ยว ${fmt(scRS)} | ชุด2 ${fmt(scRS2)}`,'var(--teal)','var(--teal-light)')}${cH('📤','ขายออกทั้งหมด',`เดี่ยว ${fmt(scSS)} | ชุด2 ${fmt(scSS2)}`,'var(--green)','var(--green-light)')}${cH('💸','ต้นทุนรวม',fmtB(scC),'var(--orange)','var(--orange-light)')}${cH('💰','รายรับรวม',fmtB(scR),'var(--green)','var(--green-light)')}${cH('🙏','ค่าน้ำใจรวม',fmtB(scF),'var(--purple)','var(--purple-light)')}${cH('🎟️','คงเหลือ',`เดี่ยว ${fmt(scRemS)} | ชุด2 ${fmt(scRemS2)}`,'var(--navy)','var(--blue-light)')}${cH('⭐','กำไรสุทธิงวดนี้',fmtB(scN),scN>=0?'var(--green)':'var(--red)',scN>=0?'var(--green-light)':'var(--red-light)')}<button class="btn bot" onclick="cpS()">📋 คัดลอกสรุป</button>`;
-  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:16px">📊 สรุป — ${d.activePeriod?.name||''}</h2><div class="tr"><button class="tb" style="background:${tab==='main'?'var(--navy)':'var(--blue-light)'};color:${tab==='main'?'#fff':'var(--navy)'}" onclick="S.summaryTab='main';render()">🏪 ร้านใหญ่</button><button class="tb" style="background:${tab==='scan'?'var(--teal)':'var(--teal-light)'};color:${tab==='scan'?'#fff':'var(--teal)'}" onclick="S.summaryTab='scan';render()">📱 ร้านสแกน</button></div><div class="fc" style="gap:12px">${tab==='main'?mC:sC}</div></div>`;
+  const scC=scRS*80+scRS2*160,scR=scSS*90+scSS2*200,scProfit=scSS*10+scSS2*40;
+  const scRemS=(S.scan||[]).length?S.scan[S.scan.length-1].remainSingles||0:0;
+  const scRemS2=(S.scan||[]).length?S.scan[S.scan.length-1].remainSet2||0:0;
+
+  // Scan fee input (only in summary)
+  const scanFeeKey=`scanFee_${S.activePeriodId}`;
+
+  const mC=`${cH('📦','Stock รวม',fmtB(d.tsv),'var(--n)','var(--bl)')}
+    ${cH('💰','ขายสะสม',fmtB(d.cs),'var(--g)','var(--gl)')}
+    ${cH('🎟️','หวยเหลือ',fmtB(d.lrv),'var(--o)','var(--ol)')}
+    ${cH('📋','จองค้าง',fmtB(d.bkBal),'var(--p)','var(--pl)')}
+    ${cH('🎯','ควรได้รับ',fmtB(d.sr),'var(--n)','var(--bl)')}
+    ${cH('💸','โอนแล้ว',fmtB(d.totalTransferred),'var(--g)','var(--gl)')}
+    ${cH('💵','ค้างโอน',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
+    ${Math.abs(d.balCheck)>0?`<div class="alert-box alert-err">⚠️ ไม่สมดุล ${fmtB(Math.abs(d.balCheck))}</div>`:`<div class="alert-box alert-ok">✅ สมดุล</div>`}
+    <button class="btn bo" onclick="cpM()">📋 คัดลอกสรุป</button>`;
+
+  const sC=`${cH('📥','รับเข้า',`เดี่ยว ${fmt(scRS)} | ชุด2 ${fmt(scRS2)}`,'var(--t)','var(--tl)')}
+    ${cH('📤','ขายออก',`เดี่ยว ${fmt(scSS)} | ชุด2 ${fmt(scSS2)}`,'var(--g)','var(--gl)')}
+    ${cH('💰','กำไรก่อนหักค่าน้ำใจ',fmtB(scProfit),'var(--g)','var(--gl)')}
+    ${cH('📋','จองค้าง ร้านสแกน',fmtB(d.scBkBal),'var(--o)','var(--ol)')}
+    ${cH('🎟️','คงเหลือ',`เดี่ยว ${fmt(scRemS)} | ชุด2 ${fmt(scRemS2)}`,'var(--n)','var(--bl)')}
+    <div class="pn" style="margin-bottom:12px">
+      <h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">🙏 ค่าน้ำใจคนสแกน (ลงทีเดียวสิ้นงวด)</h3>
+      ${nI('ค่าน้ำใจรวม','scFee',0,'฿')}
+      <div class="cd" style="text-align:center;background:var(--gl)"><div style="font-size:14px">กำไรสุทธิ (หลังหักค่าน้ำใจ)</div><div style="font-size:24px;font-weight:900;color:var(--g)" id="scNetDisplay">${fmtB(scProfit)}</div></div>
+    </div>
+    <button class="btn bo" style="border-color:var(--t);color:var(--t)" onclick="cpS()">📋 คัดลอกสรุป</button>`;
+
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">📊 สรุป — ${d.ap?.name||''}</h2>
+    <div class="tab-row"><button class="tab-btn" style="background:${tab==='main'?'var(--n)':'var(--bl)'};color:${tab==='main'?'#fff':'var(--n)'}" onclick="S.summaryTab='main';render()">🏪 ร้านใหญ่</button><button class="tab-btn" style="background:${tab==='scan'?'var(--t)':'var(--tl)'};color:${tab==='scan'?'#fff':'var(--t)'}" onclick="S.summaryTab='scan';render()">📱 ร้านสแกน</button></div>
+    <div class="fc" style="gap:12px">${tab==='main'?mC:sC}</div></div>`;
 }
 
 // ============================================================
 // HISTORY
 // ============================================================
 function renderHist(d){
-  const tab=S.historyTab;let cH2='';
+  const tab=S.historyTab;let c='';
   if(tab==='main'){
-    if(S.selectedHistory){const r=S.selectedHistory,ts=(r.cashSales||0)+(r.transferSales||0);cH2=`<div class="fi"><button style="font-size:18px;font-weight:700;color:#1565C0;background:none;border:none;cursor:pointer;margin-bottom:12px;font-family:inherit" onclick="S.selectedHistory=null;render()">← กลับรายการ</button><h3 style="font-size:18px;font-weight:700;color:var(--navy);margin-bottom:12px">${thaiDate(r.date)}</h3><div class="fc" style="gap:8px">${cH('💵','เงินสด',fmtB(r.cashSales),'var(--navy)','var(--blue-light)')}${cH('📲','โอน',fmtB(r.transferSales),'var(--navy)','var(--blue-light)')}${cH('💰','รวม',fmtB(ts),'var(--green)','var(--green-light)')}${cH('🎟️','หวยเหลือ',fmtB(calcRV(r)),'var(--orange)','var(--orange-light)')}${cH('💵','เงินในมือ',fmtB(r.actualCash),'var(--navy)','var(--blue-light)')}</div></div>`}
-    else if(!(S.daily||[]).length)cH2='<div style="text-align:center;padding:40px 0;font-size:18px;color:var(--gray-light)">ยังไม่มีข้อมูล</div>';
-    else cH2=[...S.daily].reverse().map((r,i)=>{const ts=(r.cashSales||0)+(r.transferSales||0);return`<button style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px;margin-bottom:8px;border-radius:12px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid var(--blue-light);cursor:pointer;font-family:inherit;text-align:left" onclick="S.selectedHistory=S.daily[${S.daily.length-1-i}];render()"><div><div style="font-weight:700;font-size:18px;color:var(--navy)">${thaiDate(r.date)}</div><div style="font-size:14px;color:var(--gray)">ขาย: ${fmtB(ts)}</div></div><div style="text-align:right"><div style="font-size:18px;font-weight:700;color:var(--navy)">${fmtB(r.actualCash)}</div><div style="font-size:12px;color:var(--gray-light)">เงินในมือ</div></div></button>`}).join('');
+    if(S.selectedHistory){const r=S.selectedHistory,ts=(r.cashSales||0)+(r.transferSales||0);c=`<div class="fi"><button style="font-size:18px;font-weight:700;color:#1565C0;background:none;border:none;cursor:pointer;margin-bottom:12px;font-family:inherit" onclick="S.selectedHistory=null;render()">← กลับ</button><h3 style="font-size:18px;font-weight:700;color:var(--n);margin-bottom:12px">${tD(r.date)}</h3><div class="fc" style="gap:8px">${cH('💵','เงินสด',fmtB(r.cashSales),'var(--n)','var(--bl)')}${cH('📲','โอน',fmtB(r.transferSales),'var(--n)','var(--bl)')}${cH('💰','รวม',fmtB(ts),'var(--g)','var(--gl)')}${cH('🎟️','หวยเหลือ',fmtB(cRV(r)),'var(--o)','var(--ol)')}</div>${r.note?`<div style="margin-top:12px;padding:12px;background:var(--bl);border-radius:12px;font-size:15px;color:var(--gr)">📝 ${r.note}</div>`:''}</div>`}
+    else if(!(S.daily||[]).length)c='<div style="text-align:center;padding:40px 0;font-size:18px;color:var(--grl)">ยังไม่มีข้อมูล</div>';
+    else c=[...S.daily].reverse().map((r,i)=>{const ts=(r.cashSales||0)+(r.transferSales||0);return`<button style="width:100%;display:flex;justify-content:space-between;align-items:center;padding:16px;margin-bottom:8px;border-radius:12px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid var(--bl);cursor:pointer;font-family:inherit;text-align:left" onclick="S.selectedHistory=S.daily[${S.daily.length-1-i}];render()"><div><div style="font-weight:700;font-size:18px;color:var(--n)">${tD(r.date)}</div><div style="font-size:14px;color:var(--gr)">ขาย: ${fmtB(ts)}</div></div><div style="text-align:right"><div style="font-size:16px;font-weight:700;color:var(--n)">${fmtB(cRV(r))}</div><div style="font-size:12px;color:var(--grl)">เหลือ</div></div></button>`}).join('');
   } else {
-    if(!(S.scan||[]).length)cH2='<div style="text-align:center;padding:40px 0;font-size:18px;color:var(--gray-light)">ยังไม่มีข้อมูล</div>';
-    else cH2=[...S.scan].reverse().map(r=>{const np=(r.sellSingles||0)*10+(r.sellSet2||0)*40-(r.scanFee||0);return`<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;margin-bottom:8px;border-radius:12px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid var(--teal-light)"><div><div style="font-weight:700;font-size:18px;color:var(--teal)">${thaiDate(r.date)}</div><div style="font-size:14px;color:var(--gray)">ขาย: เดี่ยว ${r.sellSingles||0} ชุด2 ${r.sellSet2||0}</div></div><div style="text-align:right"><div style="font-size:18px;font-weight:700;color:${np>=0?'var(--green)':'var(--red)'}">${fmtB(np)}</div><div style="font-size:12px;color:var(--gray-light)">กำไรสุทธิ</div></div></div>`}).join('');
+    if(!(S.scan||[]).length)c='<div style="text-align:center;padding:40px 0;font-size:18px;color:var(--grl)">ยังไม่มีข้อมูล</div>';
+    else c=[...S.scan].reverse().map(r=>{const np=(r.sellSingles||0)*10+(r.sellSet2||0)*40;return`<div style="display:flex;justify-content:space-between;align-items:center;padding:16px;margin-bottom:8px;border-radius:12px;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.05);border:1px solid var(--tl)"><div><div style="font-weight:700;font-size:18px;color:var(--t)">${tD(r.date)}</div><div style="font-size:14px;color:var(--gr)">ขาย: เดี่ยว${r.sellSingles||0} ชุด2=${r.sellSet2||0}</div>${r.note?`<div style="font-size:12px;color:var(--grl)">📝 ${r.note}</div>`:''}</div><div style="text-align:right"><div style="font-size:18px;font-weight:700;color:${np>=0?'var(--g)':'var(--r)'}">${fmtB(np)}</div><div style="font-size:12px;color:var(--grl)">กำไร</div></div></div>`}).join('');
   }
-  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--navy);margin-bottom:16px">📜 ประวัติรายวัน — ${d.activePeriod?.name||''}</h2><div class="tr"><button class="tb" style="background:${tab==='main'?'var(--navy)':'var(--blue-light)'};color:${tab==='main'?'#fff':'var(--navy)'}" onclick="S.historyTab='main';S.selectedHistory=null;render()">🏪 ร้านใหญ่</button><button class="tb" style="background:${tab==='scan'?'var(--teal)':'var(--teal-light)'};color:${tab==='scan'?'#fff':'var(--teal)'}" onclick="S.historyTab='scan';S.selectedHistory=null;render()">📱 ร้านสแกน</button></div>${cH2}</div>`;
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">📜 ประวัติรายวัน</h2><div class="tab-row"><button class="tab-btn" style="background:${tab==='main'?'var(--n)':'var(--bl)'};color:${tab==='main'?'#fff':'var(--n)'}" onclick="S.historyTab='main';S.selectedHistory=null;render()">🏪 ร้านใหญ่</button><button class="tab-btn" style="background:${tab==='scan'?'var(--t)':'var(--tl)'};color:${tab==='scan'?'#fff':'var(--t)'}" onclick="S.historyTab='scan';S.selectedHistory=null;render()">📱 ร้านสแกน</button></div>${c}</div>`;
 }
 
 // ============================================================
-// HELPERS
+// PERIODS (same as before)
+// ============================================================
+function renderPeriods(d){
+  let fH='';
+  if(S.showPeriodForm){const ok=S.pName&&S.pStart&&S.pEnd;fH=`<div class="pn fi" style="border:2px solid var(--bm);margin-bottom:20px"><h3 style="font-size:18px;font-weight:700;color:var(--nd);margin-bottom:16px">สร้างงวดใหม่</h3><div class="ig"><label class="il">ชื่องวด</label><input type="text" class="ii" id="pN" value="${S.pName}" placeholder="เช่น งวด 1 เม.ย. 69" style="font-size:20px"></div><div class="ig"><label class="il">📆 วันเริ่ม</label><input type="date" class="ii" id="pS" value="${S.pStart}" style="font-size:20px"></div><div class="ig"><label class="il">📆 วันสิ้นสุด</label><input type="date" class="ii" id="pE" value="${S.pEnd}" style="font-size:20px"></div>${S.pStart&&S.pEnd?`<div class="cd" style="text-align:center;background:var(--gl);margin-bottom:16px"><div class="cv" style="font-size:18px;color:var(--g)">${tD(S.pStart)} — ${tD(S.pEnd)}</div></div>`:''}<div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showPeriodForm=false;render()">ยกเลิก</button><button class="btn ${ok?'bp':'bd'} f1" onclick="createP()">✅ สร้าง</button></div></div>`}
+  const lH=[...(S.periods||[])].reverse().map(p=>{const ia=p.id===S.activePeriodId;return`<div class="pn" style="margin-bottom:12px;border:2px solid ${ia?'var(--n)':'var(--bl)'};${ia?'background:var(--bl)':''}"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div style="flex:1;cursor:pointer" onclick="selP('${p.id}')"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">${ia?'<span style="background:#1A237E;color:#fff;font-size:12px;font-weight:700;padding:2px 8px;border-radius:10px">กำลังใช้</span>':''}<span style="font-size:18px;font-weight:900;color:var(--n)">${p.name}</span></div><div style="font-size:15px;color:var(--gr)">${tD(p.startDate)} — ${tD(p.endDate)}</div></div><div style="display:flex;gap:8px">${!ia?`<button class="bs" style="background:var(--n);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="selP('${p.id}')">เลือก</button>`:''}<button class="bs" style="background:var(--rl);color:var(--r);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="delP('${p.id}')">🗑️</button></div></div></div>`}).join('');
+  return`<div class="fi">${d.ap?'<button class="bk" onclick="nav(\'home\')">← กลับ</button>':''}<h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:8px">📅 จัดการงวด</h2><p style="font-size:16px;color:var(--gr);margin-bottom:16px">สร้างงวดใหม่ หรือเลือกงวด</p>${!S.showPeriodForm?`<button class="btn bp" style="margin-bottom:20px" onclick="S.showPeriodForm=true;render()">➕ สร้างงวดใหม่</button>`:''} ${fH} ${lH}${!(S.periods||[]).length?'<div style="text-align:center;padding:40px 0"><div style="font-size:48px;margin-bottom:12px">📅</div><div style="font-size:20px;font-weight:700;color:var(--grl)">ยังไม่มีงวด</div></div>':''}</div>`;
+}
+
+// ============================================================
+// DEVICES (same as before)
+// ============================================================
+function renderDevs(){
+  const devs=S.devices||[];
+  const grp=(st)=>devs.filter(d=>d.status===st);
+  const dC=d=>{const me=d.id===DID;const ls=d.lastSeen?new Date(d.lastSeen).toLocaleString('th-TH',{dateStyle:'short',timeStyle:'short'}):'';let bt='';if(!me){if(d.status==='pending')bt=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--g);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDevSt('${d.id}','approved')">✅ อนุมัติ</button><button class="bs f1" style="background:var(--r);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDevSt('${d.id}','blocked')">🚫 บล็อก</button></div>`;else if(d.status==='approved')bt=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--r);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDevSt('${d.id}','blocked')">🚫 บล็อก</button><button class="bs" style="background:var(--rl);color:var(--r);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="rmDev('${d.id}')">🗑️</button></div>`;else bt=`<div class="fr" style="gap:8px;margin-top:8px"><button class="bs f1" style="background:var(--g);color:#fff;border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="setDevSt('${d.id}','approved')">✅ ปลดบล็อก</button><button class="bs" style="background:var(--rl);color:var(--r);border:none;cursor:pointer;font-family:inherit;font-weight:700" onclick="rmDev('${d.id}')">🗑️</button></div>`}return`<div class="pn" style="margin-bottom:12px;border:2px solid ${d.status==='approved'?'#A5D6A7':d.status==='pending'?'#FFE082':'#EF9A9A'}"><div style="font-size:18px;font-weight:700;color:var(--n)">${d.name||''} ${me?'<span style="font-size:12px;background:var(--n);color:#fff;padding:2px 8px;border-radius:10px">เครื่องนี้</span>':''}</div><div style="font-size:14px;color:var(--gr)">${d.role==='master'?'👑 เจ้าของ':'👤 พนักงาน'} • ${d.status==='approved'?'✅':'⏳'} • ${ls}</div>${bt}</div>`};
+  const sec=(st,lbl,clr)=>{const g=grp(st);return g.length?`<div style="margin-bottom:16px"><h3 style="font-size:16px;font-weight:700;color:${clr};margin-bottom:8px">${lbl} (${g.length})</h3>${g.map(dC).join('')}</div>`:''};
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">📱 จัดการอุปกรณ์</h2>${sec('pending','⏳ รออนุมัติ','var(--o)')}${sec('approved','✅ อนุมัติแล้ว','var(--g)')}${sec('blocked','🚫 ถูกบล็อก','var(--r)')}${!devs.length?'<div style="text-align:center;padding:40px;font-size:18px;color:var(--grl)">ไม่มีอุปกรณ์</div>':''}</div>`;
+}
+
+// ============================================================
+// HELPERS & ACTIONS
 // ============================================================
 function nI(l,id,v,sf){return`<div class="ig"><label class="il">${l}</label><div class="ir"><input type="number" inputmode="numeric" class="ii" id="${id}" value="${v||''}" placeholder="0">${sf?`<span class="is">${sf}</span>`:''}</div></div>`}
 function gV(id){const e=document.getElementById(id);return e?(Number(e.value)||0):0}
 function gS(id){const e=document.getElementById(id);return e?e.value.trim():''}
 
-function nav(p){S.page=p;S.selectedHistory=null;if(p==='daily-main'){S.stepMain=1;S.formMain=null}if(p==='daily-scan'){S.stepScan=1;S.formScan=null}if(p==='stock')S.formStock=null;if(p==='bookings'){S.showBookingForm=false;S.formBooking=null}render();window.scrollTo(0,0)}
+function nav(p){S.page=p;S.selectedHistory=null;S.bkMode=null;S.sbkMode=null;S.showTfForm=false;if(p==='daily-main'){S.stepMain=1;S.formMain=null}if(p==='daily-scan'){S.stepScan=1;S.formScan=null}if(p==='stock')S.formStock=null;render();window.scrollTo(0,0)}
 
-// ACTIONS
-async function createPeriod(){const n=gS('pN'),s=gS('pS'),e=gS('pE');if(!n||!s||!e)return;const id='p_'+Date.now();if(!S.periods)S.periods=[];S.periods.push({id,name:n,startDate:s,endDate:e,createdAt:todayStr()});S.activePeriodId=id;S.showPeriodForm=false;S.pName='';S.pStart=todayStr();S.pEnd='';await savePeriods();await loadPD();showToast('✅ สร้างงวดเรียบร้อย');nav('home')}
-async function selectPeriod(id){S.activePeriodId=id;await fbS('activePeriodId',id);await loadPD();showToast('✅ เลือกงวดแล้ว');nav('home')}
-async function deletePeriod(id){if(!confirm('ลบงวดนี้และข้อมูลทั้งหมด?'))return;S.periods=(S.periods||[]).filter(p=>p.id!==id);if(S.activePeriodId===id)S.activePeriodId=null;await savePeriods();await db.ref(`data/${id}`).remove();await loadPD();showToast('🗑️ ลบงวดแล้ว');render()}
+// Period actions
+async function createP(){const n=gS('pN'),s=gS('pS'),e=gS('pE');if(!n||!s||!e)return;const id='p_'+Date.now();if(!S.periods)S.periods=[];S.periods.push({id,name:n,startDate:s,endDate:e});S.activePeriodId=id;S.showPeriodForm=false;S.pName='';S.pStart=today();S.pEnd='';await savePeriods();await loadPD();toast('✅ สร้างงวดแล้ว');nav('home')}
+async function selP(id){S.activePeriodId=id;await fS('activePeriodId',id);await loadPD();toast('✅ เลือกงวดแล้ว');nav('home')}
+async function delP(id){if(!confirm('ลบงวดนี้?'))return;S.periods=(S.periods||[]).filter(p=>p.id!==id);if(S.activePeriodId===id)S.activePeriodId=null;await savePeriods();await db.ref(`data/${id}`).remove();await loadPD();toast('🗑️ ลบแล้ว');render()}
 
-function rdM(){const f=S.formMain,st=S.stepMain;if(st===1){f.cashSales=gV('fmC');f.transferSales=gV('fmT')}if(st===2)TYPES.forEach(t=>{f[t.rkey]=gV(`fm_${t.rkey}`)});if(st===3){f.bookingCount=gV('fmBC');f.bookingValue=gV('fmBV')}if(st===4)f.actualCash=gV('fmA')}
-async function svM(){const f=S.formMain;if(!S.daily)S.daily=[];const i=S.daily.findIndex(r=>r.date===f.date);if(i>=0)S.daily[i]=f;else S.daily.push(f);await saveDaily();S.formMain=null;S.stepMain=1;showToast('💾 บันทึกร้านใหญ่แล้ว');nav('home')}
+// Daily Main
+function rdM(){const f=S.formMain,st=S.stepMain;if(st===1){f.cashSales=gV('fmC');f.transferSales=gV('fmT')}if(st===2){TY.forEach(t=>{f[t.r]=gV(`fm_${t.r}`)});f.note=gS('fmNote')}}
+async function svM(){const f=S.formMain;if(!S.daily)S.daily=[];const i=S.daily.findIndex(r=>r.date===f.date);if(i>=0)S.daily[i]=f;else S.daily.push(f);await saveD('daily');S.formMain=null;S.stepMain=1;toast('💾 บันทึกร้านใหญ่แล้ว');nav('home')}
 
-function rdS(){const f=S.formScan,st=S.stepScan;if(st===1){f.receiveSingles=gV('fsRS');f.receiveSet2=gV('fsRS2')}if(st===2){f.sellSingles=gV('fsSS');f.sellSet2=gV('fsSS2')}if(st===3)f.scanFee=gV('fsF')}
-async function svS(){const f=S.formScan,prs=f._pRS||0,prs2=f._pRS2||0;f.remainSingles=prs+(f.receiveSingles||0)-(f.sellSingles||0);f.remainSet2=prs2+(f.receiveSet2||0)-(f.sellSet2||0);delete f._pRS;delete f._pRS2;if(!S.scan)S.scan=[];const i=S.scan.findIndex(r=>r.date===f.date);if(i>=0)S.scan[i]=f;else S.scan.push(f);await saveScan();S.formScan=null;S.stepScan=1;showToast('💾 บันทึกร้านสแกนแล้ว');nav('home')}
+// Daily Scan
+function rdS(){const f=S.formScan,st=S.stepScan;if(st===1){f.receiveSingles=gV('fsRS');f.receiveSet2=gV('fsRS2')}if(st===2){f.sellSingles=gV('fsSS');f.sellSet2=gV('fsSS2');f.note=gS('fsNote')}}
+async function svS(){const f=S.formScan,prs=f._pRS||0,prs2=f._pRS2||0;f.remainSingles=prs+(f.receiveSingles||0)-(f.sellSingles||0);f.remainSet2=prs2+(f.receiveSet2||0)-(f.sellSet2||0);delete f._pRS;delete f._pRS2;if(!S.scan)S.scan=[];const i=S.scan.findIndex(r=>r.date===f.date);if(i>=0)S.scan[i]=f;else S.scan.push(f);await saveD('scan');S.formScan=null;S.stepScan=1;toast('💾 บันทึกร้านสแกนแล้ว');nav('home')}
 
-async function svSt(){const f={date:gS('stD')||todayStr()};TYPES.forEach(t=>{f[t.key]=gV(`st_${t.key}`)});f.totalValue=TYPES.reduce((s,t)=>s+(f[t.key]||0)*t.price,0);if(f.totalValue===0)return;if(!S.stock)S.stock=[];S.stock.push(f);await saveStock();S.formStock=null;showToast('💾 บันทึกหวยเข้าแล้ว');render()}
-async function delSt(i){S.stock.splice(i,1);await saveStock();render()}
+// Stock
+async function svSt(){const f={date:gS('stD')||today()};TY.forEach(t=>{f[t.k]=gV(`st_${t.k}`)});f.totalValue=TY.reduce((s,t)=>s+(f[t.k]||0)*t.p,0);if(f.totalValue===0)return;if(!S.stock)S.stock=[];S.stock.push(f);await saveD('stock');S.formStock=null;toast('💾 บันทึกหวยเข้าแล้ว');render()}
+async function delSt(i){S.stock.splice(i,1);await saveD('stock');render()}
 
-async function svBk(){const n=gS('bkN');if(!n)return;const b={id:String(Date.now()),customerName:n,status:'⏳รอ',paidDate:'',paidAmount:0};TYPES.forEach(t=>{b[t.key]=gV(`bk_${t.key}`)});b.bookingValue=TYPES.reduce((s,t)=>s+(b[t.key]||0)*t.price,0);if(!S.bookings)S.bookings=[];S.bookings.push(b);await saveBookings();S.showBookingForm=false;S.formBooking=null;showToast('💾 บันทึกลูกค้าจองแล้ว');render()}
-async function upBk(id,st,pa){S.bookings=(S.bookings||[]).map(b=>b.id===id?{...b,status:st,paidAmount:pa??b.paidAmount,paidDate:todayStr()}:b);await saveBookings();render()}
-async function delBk(id){S.bookings=(S.bookings||[]).filter(b=>b.id!==id);await saveBookings();render()}
+// Bookings (main)
+async function addBk(){const a=gV('bkAmt'),n=gS('bkNote');if(!a)return;if(!S.bookings)S.bookings=[];S.bookings.push({type:'add',amount:a,note:n,date:today(),ts:now()});await saveD('bookings');S.bkMode=null;toast('✅ เพิ่มจองแล้ว');render()}
+async function cutBk(){const a=gV('bkAmt'),n=gS('bkNote');if(!a)return;if(!S.bookings)S.bookings=[];S.bookings.push({type:'cut',amount:a,note:n,date:today(),ts:now()});await saveD('bookings');S.bkMode=null;toast('✅ ตัดจองแล้ว');render()}
 
-function cpM(){const d=getD();const t=`📊 สรุป ${d.activePeriod?.name}\n🏪 ร้านใหญ่\nStock: ${fmtB(d.totalStockValue)}\nขาย: ${fmtB(d.cumulativeSales)}\nเหลือ: ${fmtB(d.latestRemainValue)}\nจอง: ${fmtB(d.totalBookingValue)}\nเงินในมือ: ${fmtB(d.actualCash)}\nควรได้: ${fmtB(d.shouldReceive)}\nผลต่าง: ${fmtB(d.diffFromShould)}`;navigator.clipboard?.writeText(t);showToast('📋 คัดลอกแล้ว')}
-function cpS(){const d=getD();const scRS=(S.scan||[]).reduce((s,r)=>s+(r.receiveSingles||0),0),scSS=(S.scan||[]).reduce((s,r)=>s+(r.sellSingles||0),0);const t=`📊 สรุป ${d.activePeriod?.name}\n📱 ร้านสแกน\nรับ: ${scRS}\nขาย: ${scSS}\nกำไรสุทธิ: ${fmtB(scSS*90-scRS*80-(S.scan||[]).reduce((s,r)=>s+(r.scanFee||0),0))}`;navigator.clipboard?.writeText(t);showToast('📋 คัดลอกแล้ว')}
+// Scan bookings
+async function addSBk(){const a=gV('sbkAmt'),n=gS('sbkNote');if(!a)return;if(!S.scanBookings)S.scanBookings=[];S.scanBookings.push({type:'add',amount:a,note:n,date:today(),ts:now()});await saveD('scanBookings');S.sbkMode=null;toast('✅ เพิ่มจองแล้ว');render()}
+async function cutSBk(){const a=gV('sbkAmt'),n=gS('sbkNote');if(!a)return;if(!S.scanBookings)S.scanBookings=[];S.scanBookings.push({type:'cut',amount:a,note:n,date:today(),ts:now()});await saveD('scanBookings');S.sbkMode=null;toast('✅ ตัดจองแล้ว');render()}
 
-function doLogout(){S.authed=false;S.role=null;S.deviceStatus=null;sessionStorage.removeItem('lottery_role');render()}
+// Transfers
+async function addTf(){const a=gV('tfAmt'),n=gS('tfNote');if(!a)return;if(!S.transfers)S.transfers=[];S.transfers.push({amount:a,note:n,date:today(),ts:now()});await saveD('transfers');S.showTfForm=false;toast('💸 บันทึกโอนแล้ว');render()}
+
+// Copy
+function cpM(){const d=getD();const t=`📊 สรุป ${d.ap?.name}\n🏪 ร้านใหญ่\nStock: ${fmtB(d.tsv)}\nขาย: ${fmtB(d.cs)}\nเหลือ: ${fmtB(d.lrv)}\nจอง: ${fmtB(d.bkBal)}\nควรได้: ${fmtB(d.sr)}\nโอนแล้ว: ${fmtB(d.totalTransferred)}\nค้างโอน: ${fmtB(d.pendingTransfer)}`;navigator.clipboard?.writeText(t);toast('📋 คัดลอกแล้ว')}
+function cpS(){const scSS=(S.scan||[]).reduce((s,r)=>s+(r.sellSingles||0),0),scSS2=(S.scan||[]).reduce((s,r)=>s+(r.sellSet2||0),0);const p=scSS*10+scSS2*40;const t=`📊 สรุป ${getD().ap?.name}\n📱 ร้านสแกน\nขาย: เดี่ยว${scSS} ชุด2=${scSS2}\nกำไร: ${fmtB(p)}`;navigator.clipboard?.writeText(t);toast('📋 คัดลอกแล้ว')}
+
+function doLogout(){S.authed=false;S.role=null;S.deviceStatus=null;sessionStorage.removeItem('lr');render()}
 
 function attachEv(){const pN=document.getElementById('pN'),pS=document.getElementById('pS'),pE=document.getElementById('pE');if(pN)pN.oninput=()=>{S.pName=pN.value};if(pS)pS.onchange=()=>{S.pStart=pS.value};if(pE)pE.onchange=()=>{S.pEnd=pE.value}}
 
 // ============================================================
 // INIT
 // ============================================================
-async function initData(){S.loading=true;render();try{await loadPeriods();await loadPD();if(S.role==='master')await loadDevices()}catch(e){console.error(e);showToast('⚠️ โหลดข้อมูลไม่สำเร็จ',3000)}S.loading=false;render()}
+async function initData(){S.loading=true;render();try{await loadPeriods();await loadPD();if(S.role==='master')await loadDevs()}catch(e){console.error(e);toast('⚠️ โหลดไม่สำเร็จ',3000)}S.loading=false;render()}
 
-// Session restore
-const savedRole=sessionStorage.getItem('lottery_role');
-if(savedRole){
-  S.loading=true;S.authed=true;S.role=savedRole;render();
-  (async()=>{
-    const dev=await checkDevice();
-    if(savedRole==='master'){S.deviceStatus='approved';await initData()}
-    else if(dev?.status==='approved'){S.deviceStatus='approved';await initData()}
-    else if(dev?.status==='blocked'){S.deviceStatus='blocked';S.loading=false;render()}
-    else{S.deviceStatus='pending';S.loading=false;render()}
-  })();
-} else {S.loading=false;render()}
+const sr=sessionStorage.getItem('lr');
+if(sr){S.loading=true;S.authed=true;S.role=sr;render();(async()=>{const dev=await chkDev();if(sr==='master'){S.deviceStatus='approved';await initData()}else if(dev?.status==='approved'){S.deviceStatus='approved';await initData()}else if(dev?.status==='blocked'){S.deviceStatus='blocked';S.loading=false;render()}else{S.deviceStatus='pending';S.loading=false;render()}})()}else{S.loading=false;render()}
 </script>
 </body>
 </html>
