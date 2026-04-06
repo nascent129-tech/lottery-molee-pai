@@ -121,9 +121,12 @@ let S={
   selectedHistory:null,historyTab:'main',summaryTab:'main',
   // Booking form
   bkMode:null,bkAmount:0,bkNote:'',
+  bkEditIdx:null,bkEditAmount:0,bkEditNote:'',bkEditType:'add',
   sbkMode:null,sbkAmount:0,sbkNote:'',
+  sbkEditIdx:null,sbkEditAmount:0,sbkEditNote:'',sbkEditType:'add',
   // Transfer form
   tfAmount:0,tfNote:'',showTfForm:false,
+  tfEditIdx:null,tfEditAmount:0,tfEditNote:'',
 };
 
 // ============================================================
@@ -228,7 +231,7 @@ function renderHome(d){
       ${cH('💰','ยอดขายสะสม',fmtB(d.cs),'var(--n)','var(--bl)')}
       ${cH('🎯','ควรได้รับ',fmtB(d.sr),'var(--n)','var(--bl)')}
       ${cH('📋','จองค้าง',fmtB(d.bkBal),'var(--o)','var(--ol)')}
-      ${cH('💸','ค้างโอน',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
+      ${cH('💵','เงินสด รอเข้าบัญชี',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
     </div>
     <div class="fc" style="gap:12px;margin-bottom:16px">
       <button class="bb" style="background:linear-gradient(135deg,var(--n),#1565C0)" onclick="nav('daily-main')"><div class="bbc"><span class="bbi">🏪</span><span class="bbt">กรอกข้อมูลวันนี้ — ร้านใหญ่</span></div>${!d.te?'<span class="bdg pulse">ยังไม่กรอก</span>':''}</button>
@@ -238,7 +241,7 @@ function renderHome(d){
       <button class="nb" onclick="nav('stock')">📦 หวยเข้า-Stock</button>
       <button class="nb" onclick="nav('bookings')">📋 จอง ร้านใหญ่ <span style="font-size:14px;color:var(--o)">(${fmtB(d.bkBal)})</span></button>
       <button class="nb" onclick="nav('scan-bookings')">📋 จอง ร้านสแกน <span style="font-size:14px;color:var(--o)">(${fmtB(d.scBkBal)})</span></button>
-      <button class="nb" onclick="nav('transfers')">💸 โอนเงิน <span style="font-size:14px;color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">(ค้าง ${fmtB(d.pendingTransfer)})</span></button>
+      <button class="nb" onclick="nav('transfers')">💵 นำฝากเงินสด <span style="font-size:14px;color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">(รอนำเข้า ${fmtB(d.pendingTransfer)})</span></button>
       <button class="nb" onclick="nav('summary')">📊 สรุปงวด</button>
       <button class="nb" onclick="nav('history')">📜 ประวัติรายวัน</button>
       <hr class="dv">
@@ -371,7 +374,19 @@ function renderBk(d){
   const totalCut=items.filter(b=>b.type==='cut').reduce((s,b)=>s+(b.amount||0),0);
 
   let formH='';
-  if(S.bkMode==='add'){
+  if(S.bkEditIdx!==null){
+    const realIdx=items.length-1-S.bkEditIdx;
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--n)">
+      <h3 style="font-size:18px;font-weight:700;color:var(--n);margin-bottom:12px">✏️ แก้ไขรายการ</h3>
+      <div class="ig"><label class="il">ประเภท</label><div class="fr" style="gap:8px">
+        <button style="flex:1;padding:10px;border-radius:10px;font-size:16px;font-weight:700;border:2px solid ${S.bkEditType==='add'?'var(--g)':'#ccc'};background:${S.bkEditType==='add'?'var(--gl)':'#fff'};cursor:pointer;font-family:inherit" onclick="S.bkEditType='add';render()">➕ เพิ่มจอง</button>
+        <button style="flex:1;padding:10px;border-radius:10px;font-size:16px;font-weight:700;border:2px solid ${S.bkEditType==='cut'?'var(--r)':'#ccc'};background:${S.bkEditType==='cut'?'var(--rl)':'#fff'};cursor:pointer;font-family:inherit" onclick="S.bkEditType='cut';render()">➖ มารับหวย</button>
+      </div></div>
+      ${nI('จำนวนเงิน','bkAmt',S.bkEditAmount,'฿')}
+      <div class="ig"><label class="il">หมายเหตุ (ถ้ามี)</label><input type="text" class="iit" id="bkNote" value="${S.bkEditNote}" placeholder="เช่น ลูกค้า 3 คน"></div>
+      <div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.bkEditIdx=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="saveBkEdit(${realIdx})">✅ บันทึก</button></div>
+    </div>`;
+  } else if(S.bkMode==='add'){
     formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)">
       <h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">➕ เพิ่มยอดจอง</h3>
       ${nI('จำนวนเงิน','bkAmt',S.bkAmount,'฿')}
@@ -387,10 +402,15 @@ function renderBk(d){
     </div>`;
   }
 
-  const histH=items.length?[...items].reverse().map(b=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}">
+  const realItems=[...items].reverse();
+  const histH=items.length?realItems.map((b,i)=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}">
     <div class="fr" style="justify-content:space-between;align-items:center">
       <div><span style="font-weight:700;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'➕ เพิ่มจอง':'➖ มารับหวย'}</span> <span style="font-size:14px;color:var(--gr)">${tD(b.date)}</span></div>
-      <span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span>
+      <div class="fr" style="align-items:center;gap:8px">
+        <span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span>
+        <button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="startBkEdit(${i})">✏️</button>
+        <button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="delBk(${items.length-1-i})">🗑️</button>
+      </div>
     </div>
     ${b.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${b.note}</div>`:''}
   </div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
@@ -402,7 +422,7 @@ function renderBk(d){
       ${cH('📋','จองค้างคงเหลือ',fmtB(bal),'var(--o)','var(--ol)')}
       ${cH('📊','จองรวม/มารับรวม',`+${fmtB(totalAdd)} / −${fmtB(totalCut)}`,'var(--n)','var(--bl)')}
     </div>
-    ${!S.bkMode?`<div class="fr" style="gap:12px;margin-bottom:16px">
+    ${!S.bkMode&&S.bkEditIdx===null?`<div class="fr" style="gap:12px;margin-bottom:16px">
       <button class="btn bg f1" onclick="S.bkMode='add';S.bkAmount=0;S.bkNote='';render()">➕ เพิ่มจอง</button>
       <button class="btn bp f1" onclick="S.bkMode='cut';S.bkAmount=0;S.bkNote='';render()">➖ มารับหวย</button>
     </div>`:''}
@@ -416,17 +436,37 @@ function renderBk(d){
 function renderSBk(d){
   const items=S.scanBookings||[];
   const bal=d.scBkBal;
+  const totalAdd=items.filter(b=>b.type==='add').reduce((s,b)=>s+(b.amount||0),0);
+  const totalCut=items.filter(b=>b.type==='cut').reduce((s,b)=>s+(b.amount||0),0);
+
   let formH='';
-  if(S.sbkMode==='add'){
+  if(S.sbkEditIdx!==null){
+    const realIdx=items.length-1-S.sbkEditIdx;
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--t)">
+      <h3 style="font-size:18px;font-weight:700;color:var(--t);margin-bottom:12px">✏️ แก้ไขรายการ</h3>
+      <div class="ig"><label class="il">ประเภท</label><div class="fr" style="gap:8px">
+        <button style="flex:1;padding:10px;border-radius:10px;font-size:16px;font-weight:700;border:2px solid ${S.sbkEditType==='add'?'var(--g)':'#ccc'};background:${S.sbkEditType==='add'?'var(--gl)':'#fff'};cursor:pointer;font-family:inherit" onclick="S.sbkEditType='add';render()">➕ เพิ่มจอง</button>
+        <button style="flex:1;padding:10px;border-radius:10px;font-size:16px;font-weight:700;border:2px solid ${S.sbkEditType==='cut'?'var(--r)':'#ccc'};background:${S.sbkEditType==='cut'?'var(--rl)':'#fff'};cursor:pointer;font-family:inherit" onclick="S.sbkEditType='cut';render()">➖ มารับหวย</button>
+      </div></div>
+      ${nI('จำนวนเงิน','sbkAmt',S.sbkEditAmount,'฿')}
+      <div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="sbkNote" value="${S.sbkEditNote}" placeholder=""></div>
+      <div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.sbkEditIdx=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="saveSBkEdit(${realIdx})">✅ บันทึก</button></div>
+    </div>`;
+  } else if(S.sbkMode==='add'){
     formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)"><h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">➕ เพิ่มยอดจอง</h3>${nI('จำนวนเงิน','sbkAmt',S.sbkAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="sbkNote" value="${S.sbkNote}" placeholder=""></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.sbkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="addSBk()">✅ บันทึก</button></div></div>`;
   } else if(S.sbkMode==='cut'){
     formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--o)"><h3 style="font-size:18px;font-weight:700;color:var(--o);margin-bottom:12px">➖ ลูกค้ามารับหวย</h3>${nI('จำนวนเงิน','sbkAmt',S.sbkAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="sbkNote" value="${S.sbkNote}" placeholder=""></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.sbkMode=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="cutSBk()">✅ บันทึก</button></div></div>`;
   }
-  const histH=items.length?[...items].reverse().map(b=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'➕ เพิ่มจอง':'➖ มารับหวย'}</span> <span style="font-size:14px;color:var(--gr)">${tD(b.date)}</span></div><span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span></div>${b.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${b.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
+
+  const realItems=[...items].reverse();
+  const histH=items.length?realItems.map((b,i)=>`<div class="mv ${b.type==='add'?'mv-add':'mv-cut'}"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'➕ เพิ่มจอง':'➖ มารับหวย'}</span> <span style="font-size:14px;color:var(--gr)">${tD(b.date)}</span></div><div class="fr" style="align-items:center;gap:8px"><span style="font-size:18px;font-weight:900;color:${b.type==='add'?'var(--g)':'var(--r)'}">${b.type==='add'?'+':'−'}${fmtB(b.amount)}</span><button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="startSBkEdit(${i})">✏️</button><button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="delSBk(${items.length-1-i})">🗑️</button></div></div>${b.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${b.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
 
   return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--t);margin-bottom:16px">📋 จอง ร้านสแกน — ${d.ap?.name||''}</h2>
-    <div class="cd" style="text-align:center;background:var(--ol);margin-bottom:16px"><div class="ct">📋 จองค้างคงเหลือ</div><div class="cv" style="color:var(--o)">${fmtB(bal)}</div></div>
-    ${!S.sbkMode?`<div class="fr" style="gap:12px;margin-bottom:16px"><button class="btn bg f1" onclick="S.sbkMode='add';S.sbkAmount=0;S.sbkNote='';render()">➕ เพิ่มจอง</button><button class="btn bt f1" onclick="S.sbkMode='cut';S.sbkAmount=0;S.sbkNote='';render()">➖ มารับหวย</button></div>`:''}
+    <div class="g2" style="margin-bottom:16px">
+      ${cH('📋','จองค้างคงเหลือ',fmtB(bal),'var(--o)','var(--ol)')}
+      ${cH('📊','จองรวม/มารับรวม',`+${fmtB(totalAdd)} / −${fmtB(totalCut)}`,'var(--t)','var(--tl)')}
+    </div>
+    ${!S.sbkMode&&S.sbkEditIdx===null?`<div class="fr" style="gap:12px;margin-bottom:16px"><button class="btn bg f1" onclick="S.sbkMode='add';S.sbkAmount=0;S.sbkNote='';render()">➕ เพิ่มจอง</button><button class="btn bt f1" onclick="S.sbkMode='cut';S.sbkAmount=0;S.sbkNote='';render()">➖ มารับหวย</button></div>`:''}
     ${formH}<h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัติ</h3>${histH}</div>`;
 }
 
@@ -437,20 +477,24 @@ function renderTf(d){
   const items=S.transfers||[];
   const total=d.totalTransferred;
   let formH='';
-  if(S.showTfForm){
-    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)"><h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">💸 บันทึกโอนเงิน</h3>${nI('จำนวนที่โอน','tfAmt',S.tfAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="tfNote" value="${S.tfNote}" placeholder="เช่น โอนเข้าบัญชี xxx"></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showTfForm=false;render()">ยกเลิก</button><button class="btn bg f1" onclick="addTf()">✅ บันทึก</button></div></div>`;
+  if(S.tfEditIdx!==null){
+    const ri=[...items].reverse()[S.tfEditIdx];const realIdx=items.length-1-S.tfEditIdx;
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--n)"><h3 style="font-size:18px;font-weight:700;color:var(--n);margin-bottom:12px">✏️ แก้ไขรายการ</h3>${nI('จำนวนที่นำฝาก','tfAmt',S.tfEditAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="tfNote" value="${S.tfEditNote}" placeholder="เช่น นำฝากเข้าบัญชี xxx"></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.tfEditIdx=null;render()">ยกเลิก</button><button class="btn bg f1" onclick="saveTfEdit(${realIdx})">✅ บันทึก</button></div></div>`;
+  } else if(S.showTfForm){
+    formH=`<div class="pn fi" style="margin-bottom:16px;border:2px solid var(--g)"><h3 style="font-size:18px;font-weight:700;color:var(--g);margin-bottom:12px">💵 บันทึกนำฝากเงินสด</h3>${nI('จำนวนที่นำฝาก','tfAmt',S.tfAmount,'฿')}<div class="ig"><label class="il">หมายเหตุ</label><input type="text" class="iit" id="tfNote" value="${S.tfNote}" placeholder="เช่น นำฝากเข้าบัญชี xxx"></div><div class="fr" style="gap:12px"><button class="btn bo f1" onclick="S.showTfForm=false;render()">ยกเลิก</button><button class="btn bg f1" onclick="addTf()">✅ บันทึก</button></div></div>`;
   }
-  const histH=items.length?[...items].reverse().map(t=>`<div class="mv mv-cut"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:var(--g)">💸 โอนเงิน</span> <span style="font-size:14px;color:var(--gr)">${tD(t.date)}</span></div><span style="font-size:18px;font-weight:900;color:var(--g)">${fmtB(t.amount)}</span></div>${t.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${t.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีการโอน</div>';
+  const realItems=[...items].reverse();
+  const histH=items.length?realItems.map((t,i)=>`<div class="mv mv-cut"><div class="fr" style="justify-content:space-between;align-items:center"><div><span style="font-weight:700;color:var(--g)">💵 นำฝากเงินสด</span> <span style="font-size:14px;color:var(--gr)">${tD(t.date)}</span></div><div class="fr" style="align-items:center;gap:8px"><span style="font-size:18px;font-weight:900;color:var(--g)">${fmtB(t.amount)}</span><button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="startTfEdit(${i})">✏️</button><button style="background:none;border:none;cursor:pointer;font-size:16px;padding:4px" onclick="delTf(${items.length-1-i})">🗑️</button></div></div>${t.note?`<div style="font-size:14px;color:var(--gr);margin-top:4px">${t.note}</div>`:''}</div>`).join(''):'<div style="text-align:center;padding:24px;font-size:16px;color:var(--grl)">ยังไม่มีรายการ</div>';
 
-  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">💸 โอนเงิน — ${d.ap?.name||''}</h2>
+  return`<div class="fi"><button class="bk" onclick="nav('home')">← กลับ</button><h2 style="font-size:20px;font-weight:900;color:var(--n);margin-bottom:16px">💵 นำฝากเงินสด — ${d.ap?.name||''}</h2>
     <div class="g2" style="margin-bottom:16px">
       ${cH('💰','ขายสะสม',fmtB(d.cs),'var(--n)','var(--bl)')}
-      ${cH('💸','โอนแล้ว',fmtB(total),'var(--g)','var(--gl)')}
+      ${cH('💵','นำฝากแล้ว',fmtB(total),'var(--g)','var(--gl)')}
     </div>
-    <div class="cd" style="text-align:center;margin-bottom:16px;background:${d.pendingTransfer>0?'var(--ol)':'var(--gl)'}"><div class="ct">💵 ค้างโอน</div><div class="cv" style="color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">
+    <div class="cd" style="text-align:center;margin-bottom:16px;background:${d.pendingTransfer>0?'var(--ol)':'var(--gl)'}"><div class="ct">💵 รอนำเข้าบัญชี</div><div class="cv" style="color:${d.pendingTransfer>0?'var(--o)':'var(--g)'}">
       ${fmtB(d.pendingTransfer)}</div></div>
-    ${!S.showTfForm?`<button class="btn bp" style="margin-bottom:16px" onclick="S.showTfForm=true;S.tfAmount=0;S.tfNote='';render()">💸 บันทึกโอนเงิน</button>`:''}
-    ${formH}<h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัติโอน</h3>${histH}</div>`;
+    ${!S.showTfForm&&S.tfEditIdx===null?`<button class="btn bp" style="margin-bottom:16px" onclick="S.showTfForm=true;S.tfAmount=0;S.tfNote='';render()">💵 บันทึกนำฝากเงินสด</button>`:''}
+    ${formH}<h3 style="font-size:16px;font-weight:700;color:var(--nd);margin-bottom:8px">📜 ประวัตินำฝาก</h3>${histH}</div>`;
 }
 
 // ============================================================
@@ -483,8 +527,8 @@ function renderSum(d){
     ${cH('🎟️','หวยเหลือ',fmtB(d.lrv),'var(--o)','var(--ol)')}
     ${cH('📋','จองค้าง',fmtB(d.bkBal),'var(--p)','var(--pl)')}
     ${cH('🎯','ควรได้รับ',fmtB(d.sr),'var(--n)','var(--bl)')}
-    ${cH('💸','โอนแล้ว',fmtB(d.totalTransferred),'var(--g)','var(--gl)')}
-    ${cH('💵','ค้างโอน',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
+    ${cH('💵','นำฝากแล้ว',fmtB(d.totalTransferred),'var(--g)','var(--gl)')}
+    ${cH('💵','รอนำเข้าบัญชี',fmtB(d.pendingTransfer),d.pendingTransfer>0?'var(--o)':'var(--g)',d.pendingTransfer>0?'var(--ol)':'var(--gl)')}
     ${Math.abs(d.balCheck)>0?`<div class="alert-box alert-err">⚠️ ไม่สมดุล ${fmtB(Math.abs(d.balCheck))}</div>`:`<div class="alert-box alert-ok">✅ สมดุล</div>`}
     <button class="btn bo" onclick="cpM()">📋 คัดลอกสรุป</button>`;
 
@@ -549,7 +593,7 @@ function nI(l,id,v,sf){return`<div class="ig"><label class="il">${l}</label><div
 function gV(id){const e=document.getElementById(id);return e?(Number(e.value)||0):0}
 function gS(id){const e=document.getElementById(id);return e?e.value.trim():''}
 
-function nav(p){S.page=p;S.selectedHistory=null;S.bkMode=null;S.sbkMode=null;S.showTfForm=false;if(p==='daily-main'){S.stepMain=1;S.formMain=null}if(p==='daily-scan'){S.stepScan=1;S.formScan=null}if(p==='stock')S.formStock=null;render();window.scrollTo(0,0)}
+function nav(p){S.page=p;S.selectedHistory=null;S.bkMode=null;S.bkEditIdx=null;S.sbkMode=null;S.sbkEditIdx=null;S.showTfForm=false;S.tfEditIdx=null;if(p==='daily-main'){S.stepMain=1;S.formMain=null}if(p==='daily-scan'){S.stepScan=1;S.formScan=null}if(p==='stock')S.formStock=null;render();window.scrollTo(0,0)}
 
 // Period actions
 async function createP(){const n=gS('pN'),s=gS('pS'),e=gS('pE');if(!n||!s||!e)return;const id='p_'+Date.now();if(!S.periods)S.periods=[];S.periods.push({id,name:n,startDate:s,endDate:e});S.activePeriodId=id;S.showPeriodForm=false;S.pName='';S.pStart=today();S.pEnd='';await savePeriods();await loadPD();toast('✅ สร้างงวดแล้ว');nav('home')}
@@ -571,16 +615,25 @@ async function delSt(i){S.stock.splice(i,1);await saveD('stock');render()}
 // Bookings (main)
 async function addBk(){const a=gV('bkAmt'),n=gS('bkNote');if(!a)return;if(!S.bookings)S.bookings=[];S.bookings.push({type:'add',amount:a,note:n,date:today(),ts:now()});await saveD('bookings');S.bkMode=null;toast('✅ เพิ่มจองแล้ว');render()}
 async function cutBk(){const a=gV('bkAmt'),n=gS('bkNote');if(!a)return;if(!S.bookings)S.bookings=[];S.bookings.push({type:'cut',amount:a,note:n,date:today(),ts:now()});await saveD('bookings');S.bkMode=null;toast('✅ ตัดจองแล้ว');render()}
+function startBkEdit(i){const r=[...S.bookings].reverse()[i];S.bkEditIdx=i;S.bkEditAmount=r.amount;S.bkEditNote=r.note||'';S.bkEditType=r.type;S.bkMode=null;render()}
+async function saveBkEdit(realIdx){const a=gV('bkAmt'),n=gS('bkNote');if(!a)return;S.bookings[realIdx].amount=a;S.bookings[realIdx].note=n;S.bookings[realIdx].type=S.bkEditType;await saveD('bookings');S.bkEditIdx=null;toast('✅ แก้ไขแล้ว');render()}
+async function delBk(i){if(!confirm('ลบรายการนี้?'))return;S.bookings.splice(i,1);await saveD('bookings');S.bkEditIdx=null;toast('🗑️ ลบแล้ว');render()}
 
 // Scan bookings
 async function addSBk(){const a=gV('sbkAmt'),n=gS('sbkNote');if(!a)return;if(!S.scanBookings)S.scanBookings=[];S.scanBookings.push({type:'add',amount:a,note:n,date:today(),ts:now()});await saveD('scanBookings');S.sbkMode=null;toast('✅ เพิ่มจองแล้ว');render()}
 async function cutSBk(){const a=gV('sbkAmt'),n=gS('sbkNote');if(!a)return;if(!S.scanBookings)S.scanBookings=[];S.scanBookings.push({type:'cut',amount:a,note:n,date:today(),ts:now()});await saveD('scanBookings');S.sbkMode=null;toast('✅ ตัดจองแล้ว');render()}
+function startSBkEdit(i){const r=[...S.scanBookings].reverse()[i];S.sbkEditIdx=i;S.sbkEditAmount=r.amount;S.sbkEditNote=r.note||'';S.sbkEditType=r.type;S.sbkMode=null;render()}
+async function saveSBkEdit(realIdx){const a=gV('sbkAmt'),n=gS('sbkNote');if(!a)return;S.scanBookings[realIdx].amount=a;S.scanBookings[realIdx].note=n;S.scanBookings[realIdx].type=S.sbkEditType;await saveD('scanBookings');S.sbkEditIdx=null;toast('✅ แก้ไขแล้ว');render()}
+async function delSBk(i){if(!confirm('ลบรายการนี้?'))return;S.scanBookings.splice(i,1);await saveD('scanBookings');S.sbkEditIdx=null;toast('🗑️ ลบแล้ว');render()}
 
 // Transfers
-async function addTf(){const a=gV('tfAmt'),n=gS('tfNote');if(!a)return;if(!S.transfers)S.transfers=[];S.transfers.push({amount:a,note:n,date:today(),ts:now()});await saveD('transfers');S.showTfForm=false;toast('💸 บันทึกโอนแล้ว');render()}
+async function addTf(){const a=gV('tfAmt'),n=gS('tfNote');if(!a)return;if(!S.transfers)S.transfers=[];S.transfers.push({amount:a,note:n,date:today(),ts:now()});await saveD('transfers');S.showTfForm=false;toast('💵 บันทึกนำฝากแล้ว');render()}
+function startTfEdit(i){const r=[...S.transfers].reverse()[i];S.tfEditIdx=i;S.tfEditAmount=r.amount;S.tfEditNote=r.note||'';S.showTfForm=false;render()}
+async function saveTfEdit(realIdx){const a=gV('tfAmt'),n=gS('tfNote');if(!a)return;S.transfers[realIdx].amount=a;S.transfers[realIdx].note=n;await saveD('transfers');S.tfEditIdx=null;toast('✅ แก้ไขแล้ว');render()}
+async function delTf(i){if(!confirm('ลบรายการนี้?'))return;S.transfers.splice(i,1);await saveD('transfers');S.tfEditIdx=null;toast('🗑️ ลบแล้ว');render()}
 
 // Copy
-function cpM(){const d=getD();const t=`📊 สรุป ${d.ap?.name}\n🏪 ร้านใหญ่\nStock: ${fmtB(d.tsv)}\nขาย: ${fmtB(d.cs)}\nเหลือ: ${fmtB(d.lrv)}\nจอง: ${fmtB(d.bkBal)}\nควรได้: ${fmtB(d.sr)}\nโอนแล้ว: ${fmtB(d.totalTransferred)}\nค้างโอน: ${fmtB(d.pendingTransfer)}`;navigator.clipboard?.writeText(t);toast('📋 คัดลอกแล้ว')}
+function cpM(){const d=getD();const t=`📊 สรุป ${d.ap?.name}\n🏪 ร้านใหญ่\nStock: ${fmtB(d.tsv)}\nขาย: ${fmtB(d.cs)}\nเหลือ: ${fmtB(d.lrv)}\nจอง: ${fmtB(d.bkBal)}\nควรได้: ${fmtB(d.sr)}\nนำฝากแล้ว: ${fmtB(d.totalTransferred)}\nรอนำเข้าบัญชี: ${fmtB(d.pendingTransfer)}`;navigator.clipboard?.writeText(t);toast('📋 คัดลอกแล้ว')}
 function cpS(){const scSS=(S.scan||[]).reduce((s,r)=>s+(r.sellSingles||0),0),scSS2=(S.scan||[]).reduce((s,r)=>s+(r.sellSet2||0),0);const p=scSS*10+scSS2*40;const t=`📊 สรุป ${getD().ap?.name}\n📱 ร้านสแกน\nขาย: เดี่ยว${scSS} ชุด2=${scSS2}\nกำไร: ${fmtB(p)}`;navigator.clipboard?.writeText(t);toast('📋 คัดลอกแล้ว')}
 
 function doLogout(){S.authed=false;S.role=null;S.deviceStatus=null;sessionStorage.removeItem('lr');render()}
